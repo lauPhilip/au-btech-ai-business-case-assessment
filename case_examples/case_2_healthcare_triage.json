@@ -1,0 +1,109 @@
+{
+"projectTitle": "Emergency Triage Assistant",
+"zones": {
+"1": [
+"Patient arrives at emergency waiting room and fills out paper intake form.",
+"Triage nurse manually reviews symptoms and assigns urgency score.",
+"Nurse enters patient vitals into Electronic Health Record (EHR) system."
+],
+"2": [
+{
+"id": "fric-h1",
+"title": "Waiting Room Bottleneck",
+"desc": "Manual intake review takes 9 minutes per patient during evening peak hours."
+},
+{
+"id": "fric-h2",
+"title": "Inconsistent Priority Scoring",
+"desc": "Fatigued staff occasionally misclassify borderline symptom descriptions."
+}
+],
+"3": [
+{
+"id": "role-h1",
+"title": "Triage Nurse",
+"desc": "Assesses patient urgency and prioritizes emergency room queue."
+},
+{
+"id": "role-h2",
+"title": "Emergency Patient",
+"desc": "Seeks fast, accurate medical evaluation and treatment."
+}
+],
+"4": [
+{
+"id": "ai-4",
+"number": 4,
+"title": "AI MAKES DECISIONS AND RECOMMENDATIONS",
+"color": "#c82373",
+"complexity": "Moderate",
+"desc": "Ranks options, scores candidates, or suggests next-best actions."
+}
+],
+"5": [
+"AI parses intake text and matches symptoms against clinical triage protocols.",
+"Nurse reviews AI-suggested priority score and confirms or adjusts before queue assignment."
+],
+"6": [
+{
+"id": "res-h1",
+"title": "Digital Intake Questionnaires",
+"desc": "Tablet-based patient symptom descriptions and vital signs."
+},
+{
+"id": "res-h2",
+"title": "Clinical Triage Guidelines",
+"desc": "Hospital approved medical decision trees and urgency criteria."
+}
+],
+"7": [
+"Patient completes digital intake tablet at check-in desk.",
+"AI suggests preliminary urgency score with clinical rule citations.",
+"Triage nurse validates score in 2 minutes and directs patient."
+],
+"8": [
+{
+"id": "val-h1",
+"title": "50% Faster Triage Assessment",
+"desc": "Reduces intake review time from 9 minutes down to 4.5 minutes."
+},
+{
+"id": "val-h2",
+"title": "Standardized Patient Safety",
+"desc": "Ensures adherence to hospital triage guidelines across all shifts."
+}
+],
+"9": [
+{
+"id": "out-h1",
+"title": "[Output Map] Ranked Triage Queue Dashboard",
+"desc": "Real-time tablet list showing waiting patients sorted by urgency score."
+}
+],
+"10": [
+{
+"id": "eth-3",
+"title": "PRIVACY",
+"icon": "lock",
+"desc": "People have the right to privacy and control over their personal data."
+},
+{
+"id": "eth-11",
+"title": "PEOPLE'S SAFETY",
+"icon": "shield-check",
+"desc": "People are physically and mentally safe when using the system."
+},
+{
+"id": "eth-15",
+"title": "HUMAN AUGMENTATION, HUMAN CONTROL",
+"icon": "hand",
+"desc": "Human-in-the-loop review to approve or override AI decisions."
+}
+],
+"11": [
+"All patient data is anonymized and encrypted in compliance with GDPR and health regulations.",
+"AI never auto-assigns queue priority; a certified nurse must sign off on every score.",
+"Display exact medical guideline references for every AI priority recommendation."
+]
+}
+}
