@@ -1,0 +1,109 @@
+{
+"projectTitle": "Multilingual Returns Chatbot",
+"zones": {
+"1": [
+"Receive 1,200 daily support chats asking about return status and refunds.",
+"Support agents manually look up order IDs in Shopify and paste tracking links.",
+"Process return label requests in 4 different European languages."
+],
+"2": [
+{
+"id": "fric-c1",
+"title": "Repetitive Support Queue",
+"desc": "80% of chats are routine 'Where is my refund?' inquiries."
+},
+{
+"id": "fric-c2",
+"title": "Language Support Delay",
+"desc": "Non-English customers wait longer for native support agents."
+}
+],
+"3": [
+{
+"id": "role-c1",
+"title": "Customer Support Agent",
+"desc": "Handles complex customer complaints and escalations."
+},
+{
+"id": "role-c2",
+"title": "Online Shopper",
+"desc": "Wants immediate answers regarding product returns and refunds."
+}
+],
+"4": [
+{
+"id": "ai-7",
+"number": 7,
+"title": "AI CHATS AND TALKS",
+"color": "#524385",
+"complexity": "Moderate",
+"desc": "Holds natural conversational dialogue with users or customers."
+}
+],
+"5": [
+"AI conversational agent retrieves order status from e-commerce API and answers user in native language.",
+"Bot escalates to human agent immediately when customer expresses frustration."
+],
+"6": [
+{
+"id": "res-c1",
+"title": "E-Commerce Order & Shipping API",
+"desc": "Real-time tracking and refund status database."
+},
+{
+"id": "res-c2",
+"title": "Support Knowledge Base",
+"desc": "Return policies, FAQ articles, and shipping rules."
+}
+],
+"7": [
+"Customer opens chat widget and asks about return status in Danish or German.",
+"AI retrieves live tracking data and generates instant accurate response.",
+"Complex refund exceptions are smoothly transferred to human support agents."
+],
+"8": [
+{
+"id": "val-c1",
+"title": "75% Automated Resolution",
+"desc": "Resolves routine return inquiries instantly 24/7."
+},
+{
+"id": "val-c2",
+"title": "Zero Wait Time",
+"desc": "Instant multilingual responses improve customer satisfaction scores."
+}
+],
+"9": [
+{
+"id": "out-c1",
+"title": "[Output Map] Conversational Chat Widget",
+"desc": "Embedded web chat showing instant order status and return label generator."
+}
+],
+"10": [
+{
+"id": "eth-6",
+"title": "DIGNITY",
+"icon": "heart-handshake",
+"desc": "People are always treated respectfully with human dignity."
+},
+{
+"id": "eth-18",
+"title": "IDENTITY",
+"icon": "id-card",
+"desc": "AI that communicates with humans clearly identifies itself as AI."
+},
+{
+"id": "eth-15",
+"title": "HUMAN AUGMENTATION, HUMAN CONTROL",
+"icon": "hand",
+"desc": "Human-in-the-loop review to approve or override AI decisions."
+}
+],
+"11": [
+"Chatbot explicitly introduces itself as an AI assistant at the start of every session.",
+"Seamless one-click escalation button to connect with a human support agent.",
+"Sentiment analysis triggers automatic handover when customer frustration is detected."
+]
+}
+}
