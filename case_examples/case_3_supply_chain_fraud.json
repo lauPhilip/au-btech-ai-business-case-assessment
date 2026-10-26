@@ -1,0 +1,109 @@
+{
+"projectTitle": "Supply Chain Invoice Fraud Detection",
+"zones": {
+"1": [
+"Receive 3,500 PDF supplier invoices monthly via email and portal.",
+"Junior accountants manually spot-check line items and bank details.",
+"Approve standard payments and flag suspicious invoices for senior review."
+],
+"2": [
+{
+"id": "fric-s1",
+"title": "Manual Audit Bottleneck",
+"desc": "Detailed invoice verification takes 12 minutes per document."
+},
+{
+"id": "fric-s2",
+"title": "Subtle Duplicate Billinng",
+"desc": "Slight variations in vendor names make duplicate invoices hard to spot."
+}
+],
+"3": [
+{
+"id": "role-s1",
+"title": "Financial Auditor",
+"desc": "Reviews flagged invoices and investigates payment discrepancies."
+},
+{
+"id": "role-s2",
+"title": "Supplier",
+"desc": "Submits invoices and expects timely payment terms."
+}
+],
+"4": [
+{
+"id": "ai-2",
+"number": 2,
+"title": "AI GAINS INSIGHTS FROM BIG DATA AND UNDERSTANDS THE PAST AND PRESENT",
+"color": "#d97538",
+"complexity": "Rather simple",
+"desc": "Detects patterns and anomalies across large historical datasets."
+}
+],
+"5": [
+"AI analyzes historical payment logs and flags anomalies in vendor IBANs or amounts.",
+"Auditor investigates high-risk flags before approving payout release."
+],
+"6": [
+{
+"id": "res-s1",
+"title": "ERP Historical Payment Logs",
+"desc": "Database of past 3 years of verified vendor transactions."
+},
+{
+"id": "res-s2",
+"title": "Incoming Supplier Invoices",
+"desc": "PDF invoices submitted via vendor portal."
+}
+],
+"7": [
+"Invoice arrives and AI computes an anomaly risk score instantly.",
+"Low-risk invoices process automatically; high-risk invoices route to auditor dashboard.",
+"Auditor resolves flagged discrepancy and logs feedback."
+],
+"8": [
+{
+"id": "val-s1",
+"title": "80% Faster Invoice Audit",
+"desc": "Cuts routine invoice check time from 12 minutes down to 2 minutes."
+},
+{
+"id": "val-s2",
+"title": "Early Fraud Prevention",
+"desc": "Catches altered bank accounts and duplicate billings before payout."
+}
+],
+"9": [
+{
+"id": "out-s1",
+"title": "[Output Map] Invoice Risk Heatmap Dashboard",
+"desc": "Table highlighting top 5 anomalous invoices with highlighted discrepancies."
+}
+],
+"10": [
+{
+"id": "eth-2",
+"title": "DATA & SYSTEM SECURITY",
+"icon": "database",
+"desc": "Data is protected and systems operate in a secure, resilient way."
+},
+{
+"id": "eth-13",
+"title": "ACCOUNTABILITY",
+"icon": "user-cog",
+"desc": "Clear which person is responsible for every action and AI decision."
+},
+{
+"id": "eth-17",
+"title": "EXPLAINABILITY, TRANSPARENCY",
+"icon": "search-check",
+"desc": "Explains how AI makes a decision in plain human language."
+}
+],
+"11": [
+"Financial auditor maintains final sign-off authority on all vendor payments.",
+"System provides plain-text explanation for why an invoice received an anomaly flag.",
+"Regular audit of false-positive flags to prevent unfair supplier delays."
+]
+}
+}
