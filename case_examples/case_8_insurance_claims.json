@@ -1,0 +1,102 @@
+{
+  "projectTitle": "Insurance Claims Fast-Track",
+  "zones": {
+    "1": [
+      "Customers submit photos and descriptions of household damage via web forms.",
+      "Claims handlers read through descriptions and match them against policy rules manually.",
+      "Simple payout approvals take 3 to 5 business days."
+    ],
+    "2": [
+      {
+        "id": "fric-t1",
+        "title": "Slow Claims Processing",
+        "desc": "Customers wait days for answers on routine damage claims."
+      },
+      {
+        "id": "fric-t2",
+        "title": "Repetitive Document Review",
+        "desc": "Handlers spend hours verifying standard invoice receipts."
+      }
+    ],
+    "3": [
+      {
+        "id": "role-t1",
+        "title": "Claims Handler",
+        "desc": "Reviews damage reports and approves standard customer payouts."
+      },
+      {
+        "id": "role-t2",
+        "title": "Homeowner Customer",
+        "desc": "Submits damage photos and expects fast compensation."
+      }
+    ],
+    "4": [
+      {
+        "id": "ai-6",
+        "number": 6,
+        "title": "AI READS",
+        "color": "#643a82",
+        "complexity": "Moderate",
+        "desc": "Extracts meaning, entities, and sentiment from written text and PDFs."
+      }
+    ],
+    "5": [
+      "AI reads claim descriptions and damage invoices, checking coverage limits automatically.",
+      "Claims handler reviews pre-approved straightforward payouts with one click."
+    ],
+    "6": [
+      {
+        "id": "res-t1",
+        "title": "Customer Damage Reports & Invoices",
+        "desc": "PDF receipts and text descriptions submitted through the mobile app."
+      },
+      {
+        "id": "res-t2",
+        "title": "Insurance Policy Database",
+        "desc": "Digital rules and coverage limits for different customer tiers."
+      }
+    ],
+    "7": [
+      "Customer uploads damage receipt and description online.",
+      "AI validates policy coverage and suggests instant payout approval for low-risk claims.",
+      "Customer receives compensation within 2 hours while complex claims route to human handlers."
+    ],
+    "8": [
+      {
+        "id": "val-t1",
+        "title": "75% Faster Claim Resolution",
+        "desc": "Cuts routine claim handling time from 3 days down to a few hours."
+      },
+      {
+        "id": "val-t2",
+        "title": "Higher Customer Satisfaction",
+        "desc": "Instant payouts for simple claims significantly boost Net Promoter Score."
+      }
+    ],
+    "9": [
+      {
+        "id": "out-t1",
+        "title": "[Output Map] Claims Review Queue",
+        "desc": "Dashboard listing auto-approved claims alongside flagged cases requiring review."
+      }
+    ],
+    "10": [
+      {
+        "id": "eth-1",
+        "title": "FAIRNESS",
+        "icon": "scale",
+        "desc": "All people are treated fairly without racial, gender, or other bias."
+      },
+      {
+        "id": "eth-15",
+        "title": "HUMAN AUGMENTATION, HUMAN CONTROL",
+        "icon": "hand",
+        "desc": "Human-in-the-loop review to approve or override AI decisions."
+      }
+    ],
+    "11": [
+      "AI never automatically denies a claim; rejection must always be decided by a human handler.",
+      "Regular audit of approval decisions to ensure equal treatment across customer groups."
+    ]
+  }
+}
