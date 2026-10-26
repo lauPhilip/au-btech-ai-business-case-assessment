@@ -1,0 +1,109 @@
+{
+"projectTitle": "HR Candidate Screening (33A Sprint)",
+"zones": {
+"1": [
+"Perform first screening of incoming job applications.",
+"Read through CVs, cover letters, and LinkedIn profiles manually.",
+"Compile video-interview shortlist and invite final candidates."
+],
+"2": [
+{
+"id": "fric-1",
+"title": "Manual CV Bottleneck",
+"desc": "Reading 250+ CVs and cover letters per role takes 14 hours."
+},
+{
+"id": "fric-2",
+"title": "Inconsistent Screening Criteria",
+"desc": "Tired reviewers unintentionally apply different screening standards."
+}
+],
+"3": [
+{
+"id": "role-1",
+"title": "HR Recruiter",
+"desc": "Screens incoming applications and schedules interviews."
+},
+{
+"id": "role-2",
+"title": "Job Applicant",
+"desc": "Submits CV and cover letter hoping for fair evaluation."
+}
+],
+"4": [
+{
+"id": "ai-6",
+"number": 6,
+"title": "AI READS",
+"color": "#643a82",
+"complexity": "Moderate",
+"desc": "Extracts meaning, entities, and sentiment from written text and PDFs."
+}
+],
+"5": [
+"AI reads CVs and extracts structured skill matches against job rubric.",
+"Recruiter reviews AI shortlist and overrides any borderline profiles."
+],
+"6": [
+{
+"id": "res-1",
+"title": "Incoming CVs & Cover Letters",
+"desc": "PDF and Word resumes submitted via the company career portal."
+},
+{
+"id": "res-2",
+"title": "Job Requirements Rubric",
+"desc": "Structured list of required skills, experience, and criteria."
+}
+],
+"7": [
+"Applications arrive and AI pre-extracts structured skill evidence.",
+"HR employee verifies shortlist and conducts video interviews.",
+"HR invites final verified candidates for in-person interviews."
+],
+"8": [
+{
+"id": "val-1",
+"title": "70% Faster First Screening",
+"desc": "Cuts initial CV review time from 14 hours down to 4 hours."
+},
+{
+"id": "val-3",
+"title": "Better Candidate Experience",
+"desc": "Every applicant gets timely feedback within 48 hours."
+}
+],
+"9": [
+{
+"id": "out-1",
+"title": "[Output Map] Ranked Shortlist Dashboard",
+"desc": "Visual table showing top 10 candidates with skill-match citations."
+}
+],
+"10": [
+{
+"id": "eth-1",
+"title": "FAIRNESS",
+"icon": "scale",
+"desc": "All people are treated fairly without racial, gender, or other bias."
+},
+{
+"id": "eth-15",
+"title": "HUMAN AUGMENTATION, HUMAN CONTROL",
+"icon": "hand",
+"desc": "During, or at the end of processes, there is a person to review the decision of the AI, to approve or disapprove it (human-in-the-loop review process)."
+},
+{
+"id": "eth-17",
+"title": "EXPLAINABILITY, TRANSPARENCY",
+"icon": "search-check",
+"desc": "Explains how AI makes a decision in plain human language."
+}
+],
+"11": [
+"Strip candidate names, photos, and age before AI parses CVs to prevent bias.",
+"AI never auto-rejects; a human recruiter must verify before sending any email.",
+"Show exact CV bullet citations for every AI skill-match score."
+]
+}
+}
