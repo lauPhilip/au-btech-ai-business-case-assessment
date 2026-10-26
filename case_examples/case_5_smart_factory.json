@@ -1,0 +1,97 @@
+{
+  "projectTitle": "Factory Machine Health Assistant",
+  "zones": {
+    "1": [
+      "Factory technicians inspect assembly machines manually once a week.",
+      "Vibration and temperature data is logged in separate offline spreadsheets.",
+      "Unexpected motor breakdowns halt production lines for up to 6 hours."
+    ],
+    "2": [
+      {
+        "id": "fric-d1",
+        "title": "Unexpected Machine Downtime",
+        "desc": "Sudden motor failures cause costly emergency repairs and lost output."
+      },
+      {
+        "id": "fric-d2",
+        "title": "Reactive Maintenance Costs",
+        "desc": "Parts are replaced too late after damage has already occurred."
+      }
+    ],
+    "3": [
+      {
+        "id": "role-d1",
+        "title": "Factory Floor Technician",
+        "desc": "Maintains assembly machinery and repairs mechanical faults."
+      },
+      {
+        "id": "role-d2",
+        "title": "Plant Operations Manager",
+        "desc": "Monitors overall factory output and maintenance budgets."
+      }
+    ],
+    "4": [
+      {
+        "id": "ai-9",
+        "number": 9,
+        "title": "AI SENSES THE ENVIRONMENT",
+        "color": "#2f6ea8",
+        "complexity": "Complex",
+        "desc": "Processes IoT telemetry, vibration, and temperature streams in real time."
+      }
+    ],
+    "5": [
+      "AI monitors continuous sensor streams and flags abnormal vibration patterns before failure.",
+      "Maintenance manager reviews the AI alert and schedules a minor part replacement during off-hours."
+    ],
+    "6": [
+      {
+        "id": "res-d1",
+        "title": "Machine IoT Sensor Streams",
+        "desc": "Live vibration and temperature data feeds from factory motors."
+      },
+      {
+        "id": "res-d2",
+        "title": "Historical Repair Logs",
+        "desc": "Past 5 years of mechanical failure records and spare part inventories."
+      }
+    ],
+    "7": [
+      "Sensors feed live operating data into the cloud platform automatically.",
+      "AI detects early wear-and-tear and sends a warning ticket 48 hours before breakdown.",
+      "Technician replaces the worn bearing during scheduled maintenance with zero downtime."
+    ],
+    "8": [
+      {
+        "id": "val-d1",
+        "title": "30% Less Unplanned Downtime",
+        "desc": "Prevents sudden factory halts and saves thousands in emergency repair costs."
+      }
+    ],
+    "9": [
+      {
+        "id": "out-d1",
+        "title": "[Output Map] Factory Health Dashboard",
+        "desc": "Color-coded plant map highlighting motors that need inspection this week."
+      }
+    ],
+    "10": [
+      {
+        "id": "eth-2",
+        "title": "DATA & SYSTEM SECURITY",
+        "icon": "database",
+        "desc": "Data is protected and systems operate in a secure, resilient way."
+      },
+      {
+        "id": "eth-11",
+        "title": "PEOPLE'S SAFETY",
+        "icon": "shield-check",
+        "desc": "People are physically and mentally safe when using the system."
+      }
+    ],
+    "11": [
+      "Factory safety officer must approve any automatic machine shutdown sequence.",
+      "All sensor data is encrypted locally before transmission to cloud servers."
+    ]
+  }
+}
