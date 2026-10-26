@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AU BTECH — AI Business Case Canvas</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            canvas: {
+              header: '#235272',     /* Exact Dark Slate-Blue from worksheet */
+              row1: '#d2d7dd',       /* Row 1 Grey from worksheet */
+              row2: '#e7eaee',       /* Row 2 Lighter Grey from worksheet */
+              row3: '#d5dade',       /* Row 3 Process Grey from worksheet */
+              ethicsHeader: '#3788c7', /* Exact Bottom Blue Header from worksheet */
+              ethicsCell: '#d0e0f0'  /* Bottom Light Blue Cell from worksheet */
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbars for clean side-by-side panels */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Active Dropzone Highlight (Fitts's Law & Hick's Law visual cue) */
+    .zone-active {
+      outline: 3px solid #2563eb;
+      outline-offset: -3px;
+      background-color: rgba(239, 246, 255, 0.88) !important;
+    }
+
+    .zone-dragover {
+      outline: 3px dashed #eab308 !important;
+      outline-offset: -3px;
+      background-color: rgba(254, 249, 195, 0.9) !important;
+    }
+
+    /* Yellow Step Number Badge (Matches 1-11 yellow squares in worksheet) */
+    .step-badge-yellow {
+      background-color: #ffff00;
+      color: #0f172a;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.18);
+    }
+
+    /* Smooth card lift */
+    .card-lift {
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+    }
+    .card-lift:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px -4px rgba(15, 23, 42, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 font-sans h-screen w-screen overflow-hidden flex flex-col select-none">
+
+  <!-- ===================================================================== -->
+  <!-- COMPACT TOP BAR: TITLE, 1-11 STEP GUIDE, EXAMPLES, , SAVE  -->
+  <!-- ===================================================================== -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 px-4 py-2 shrink-0 z-30 shadow-sm">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      
+      <!-- Left: Brand + Editable Case Title -->
+      <div class="flex items-center gap-2.5">
+        <div class="bg-[#235272] border border-sky-400/40 px-2.5 py-1 rounded font-mono text-xs font-bold tracking-wider text-sky-100">
+          AU BTECH
+        </div>
+      </div>
+
+      <!-- Center-Right: Preloaded Classroom Examples -->
+      <div class="flex items-center gap-1.5">
+        <label for="caseSelect" class="text-[11px] font-mono text-slate-400 hidden xl:inline">Template:</label>
+        <select
+          id="caseSelect"
+          onchange="loadTemplate(this.value)"
+          class="bg-slate-800 text-xs font-medium text-white px-2.5 py-1.5 rounded border border-slate-700 focus:outline-none focus:border-sky-400 cursor-pointer"
+        >
+          <option value="hr" selected>📋 Case 1: HR CV Screening (33A Sprint)</option>
+          <option value="support">✅ Case 2: Spare Parts RAG Assistant</option>
+          <option value="antipattern">❌ Anti-Pattern: "AI Magic" Sales Predictor</option>
+          <option value="blank">📝 Blank Canvas (Start Fresh)</option>
+        </select>
+      </div>
+
+      <!-- Right: Live  Formula Pill + PNG / SVG / Save Actions -->
+      <div class="flex items-center gap-1.5">
+
+        <button
+          onclick="exportBoardPNG()"
+          class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
+          title="Download High-Resolution 2x PNG Image of the Board"
+        >
+          <i data-lucide="image" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Save PNG</span>
+        </button>
+
+        <button
+          onclick="exportBoardSVG()"
+          class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
+          title="Download Scalable Vector SVG of the Board for Slides, Figma, or Reports"
+        >
+          <i data-lucide="file-code-2" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Save SVG</span>
+        </button>
+
+        <button
+          onclick="openExportModal()"
+          class="px-2.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
+          title="Open Export Studio (.png, .svg, .json, .md)"
+        >
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Export Studio</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN WORKSPACE: 11-ZONE CANVAS (LEFT 70%) + CARD GRID (RIGHT 30%)     -->
+  <!-- ===================================================================== -->
+  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    
+    <!-- LEFT 70%: 11-ZONE WORKSHEET CANVAS -->
+    <section class="flex-1 overflow-y-auto p-3 sm:p-4 bg-slate-200/70">
+      <div id="canvasBoardContainer" class="max-w-[1400px] mx-auto shadow-lg rounded-xl overflow-hidden border border-slate-300 bg-white">
+        
+        <!-- TOP 3-COLUMN GRID (AS-IS, THE TRANSFORMATION, THE VISION) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-[2px] bg-white">
+          
+          <!-- Column Headers (#235272) -->
+          <div class="bg-canvas-header text-white text-center py-2.5 px-3">
+            <div class="font-extrabold text-sm sm:text-base tracking-wide uppercase">AS-IS</div>
+            <div class="font-bold text-xs text-sky-100 uppercase">(BEFORE)</div>
+          </div>
+          <div class="bg-canvas-header text-white text-center py-2.5 px-3">
+            <div class="font-extrabold text-sm sm:text-base tracking-wide uppercase">THE TRANSFORMATION</div>
+            <div class="font-bold text-xs text-sky-100 uppercase">(HOW)</div>
+          </div>
+          <div class="bg-canvas-header text-white text-center py-2.5 px-3">
+            <div class="font-extrabold text-sm sm:text-base tracking-wide uppercase">THE VISION</div>
+            <div class="font-bold text-xs text-sky-100 uppercase">(AFTER)</div>
+          </div>
+
+          <!-- ROW 1 (#d2d7dd): Zone 3 (Role Cards), Zone 6 (Resource Cards), Zone 8 (Value Cards) -->
+          <div
+            id="zone-3"
+            onclick="selectCanvasZone(3)"
+            ondragover="handleZoneDragOver(event, 3)"
+            ondragleave="handleZoneDragLeave(event, 3)"
+            ondrop="handleZoneDrop(event, 3)"
+            class="bg-canvas-row1 p-3 min-h-[165px] cursor-pointer transition-all"
+          ></div>
+
+          <div
+            id="zone-6"
+            onclick="selectCanvasZone(6)"
+            ondragover="handleZoneDragOver(event, 6)"
+            ondragleave="handleZoneDragLeave(event, 6)"
+            ondrop="handleZoneDrop(event, 6)"
+            class="bg-canvas-row1 p-3 min-h-[165px] cursor-pointer transition-all"
+          ></div>
+
+          <div
+            id="zone-8"
+            onclick="selectCanvasZone(8)"
+            ondragover="handleZoneDragOver(event, 8)"
+            ondragleave="handleZoneDragLeave(event, 8)"
+            ondrop="handleZoneDrop(event, 8)"
+            class="bg-canvas-row1 p-3 min-h-[165px] cursor-pointer transition-all"
+          ></div>
+
+          <!-- ROW 2 (#e7eaee): Zone 2 (Friction Cards), Zone 4 (AI Capability Card), Zone 9 (Output Map) -->
+          <div
+            id="zone-2"
+            onclick="selectCanvasZone(2)"
+            ondragover="handleZoneDragOver(event, 2)"
+            ondragleave="handleZoneDragLeave(event, 2)"
+            ondrop="handleZoneDrop(event, 2)"
+            class="bg-canvas-row2 p-3 min-h-[175px] cursor-pointer transition-all"
+          ></div>
+
+          <div
+            id="zone-4"
+            onclick="selectCanvasZone(4)"
+            ondragover="handleZoneDragOver(event, 4)"
+            ondragleave="handleZoneDragLeave(event, 4)"
+            ondrop="handleZoneDrop(event, 4)"
+            class="bg-canvas-row2 p-3 min-h-[175px] cursor-pointer transition-all"
+          ></div>
+
+          <div
+            id="zone-9"
+            onclick="selectCanvasZone(9)"
+            ondragover="handleZoneDragOver(event, 9)"
+            ondragleave="handleZoneDragLeave(event, 9)"
+            ondrop="handleZoneDrop(event, 9)"
+            class="bg-canvas-row2 p-3 min-h-[175px] cursor-pointer transition-all"
+          ></div>
+
+          <!-- ROW 3 (#d5dade): Zone 1 (Current Manual Process), Zone 5 (The AI Intervention), Zone 7 (The Optimized Process) -->
+          <div
+            id="zone-1"
+            onclick="selectCanvasZone(1)"
+            class="bg-canvas-row3 p-3 min-h-[170px] cursor-pointer transition-all"
+          ></div>
+
+          <div
+            id="zone-5"
+            onclick="selectCanvasZone(5)"
+            class="bg-canvas-row3 p-3 min-h-[170px] cursor-pointer transition-all"
+          ></div>
+
+          <div
+            id="zone-7"
+            onclick="selectCanvasZone(7)"
+            class="bg-canvas-row3 p-3 min-h-[170px] cursor-pointer transition-all"
+          ></div>
+        </div>
+
+        <!-- BOTTOM 2-COLUMN ETHICS & GUARDRAILS BAR -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-[2px] bg-white mt-[2px]">
+          <div class="bg-canvas-ethicsHeader text-white text-center py-2 px-3 font-extrabold text-sm tracking-wide">
+            Ethics Cards
+          </div>
+          <div class="bg-canvas-ethicsHeader text-white text-center py-2 px-3 font-extrabold text-sm tracking-wide">
+            Ethical Guardrails
+          </div>
+
+          <!-- Zone 10: Ethics Cards (#d0e0f0) -->
+          <div
+            id="zone-10"
+            onclick="selectCanvasZone(10)"
+            ondragover="handleZoneDragOver(event, 10)"
+            ondragleave="handleZoneDragLeave(event, 10)"
+            ondrop="handleZoneDrop(event, 10)"
+            class="bg-canvas-ethicsCell p-3 min-h-[165px] cursor-pointer transition-all"
+          ></div>
+
+          <!-- Zone 11: Ethical Guardrails (#d0e0f0) -->
+          <div
+            id="zone-11"
+            onclick="selectCanvasZone(11)"
+            class="bg-canvas-ethicsCell p-3 min-h-[165px] cursor-pointer transition-all"
+          ></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RIGHT 30%: PERMANENT INTERACTIVE CARD DECK SIDEBAR -->
+    <aside class="w-full lg:w-[400px] xl:w-[440px] bg-slate-900 text-white border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col shrink-0 h-[44vh] lg:h-auto">
+      
+      <!-- Active Step Context Header -->
+      <div class="p-3 bg-slate-950/70 border-b border-slate-800 flex items-start gap-2.5">
+        <span
+          id="sidebarStepBadge"
+          class="step-badge-yellow w-7 h-7 rounded font-mono text-sm font-extrabold flex items-center justify-center shrink-0"
+        >4</span>
+        <div class="min-w-0 flex-1">
+          <h2 id="sidebarTitle" class="text-xs font-extrabold uppercase tracking-wider text-amber-300 truncate">
+            Step 4: AI Capability Card
+          </h2>
+          <p id="sidebarSubtitle" class="text-[11px] text-slate-400 leading-tight mt-0.5">
+            Place the ONE card representing the AI solution
+          </p>
+        </div>
+      </div>
+
+      <!-- Deck Category Switcher Tabs -->
+      <div class="p-2 bg-slate-900 border-b border-slate-800 grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-3 gap-1">
+        <button id="tab-capability" onclick="setDeckCategory('capability', 4)" class="deck-tab">
+          4. AI Cards (13)
+        </button>
+        <button id="tab-ethics" onclick="setDeckCategory('ethics', 10)" class="deck-tab">
+          10. Ethics (18)
+        </button>
+        <button id="tab-friction" onclick="setDeckCategory('friction', 2)" class="deck-tab">
+          2. Friction
+        </button>
+        <button id="tab-role" onclick="setDeckCategory('role', 3)" class="deck-tab">
+          3. Roles
+        </button>
+        <button id="tab-resource" onclick="setDeckCategory('resource', 6)" class="deck-tab">
+          6. Resources
+        </button>
+        <button id="tab-value" onclick="setDeckCategory('value', 8)" class="deck-tab">
+          8/9. Value &amp; Map
+        </button>
+      </div>
+
+      <!-- Complexity Spectrum Indicator (Shown for the 13 AI Capability Cards) -->
+      <div
+        id="deckComplexityBar"
+        class="px-3 py-1.5 bg-slate-950/90 border-b border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-300"
+      >
+        <span class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#d4a72c] inline-block"></span>
+          #1 Rather Simple
+        </span>
+        <span class="text-slate-500">─── Spectrum ───►</span>
+        <span class="flex items-center gap-1.5">
+          #13 Rather Complex
+          <span class="w-2.5 h-2.5 rounded-full bg-[#7ec242] inline-block"></span>
+        </span>
+      </div>
+
+      <!-- Scrollable Card Grid -->
+      <div
+        id="cardGridContainer"
+        class="flex-1 overflow-y-auto p-3 grid grid-cols-1 sm:grid-cols-2 gap-2.5 content-start"
+      ></div>
+
+      <!-- Quick Custom Card Creator Footer -->
+      <div class="p-3 bg-slate-950 border-t border-slate-800">
+        <div class="flex items-center justify-between mb-1.5">
+          <label id="customCardTargetLabel" for="customCardInput" class="text-[11px] font-bold text-slate-200">
+            + Custom Card for Step 4
+          </label>
+          <span id="customCardWordCounter" class="text-[10px] font-mono text-emerald-400">
+            0 / 12 words (Optimal)
+          </span>
+        </div>
+        <div class="flex gap-1.5">
+          <input
+            id="customCardInput"
+            type="text"
+            oninput="updateCustomCardWordCount(this.value)"
+            onkeydown="if(event.key==='Enter') addCustomCardToActiveZone()"
+            placeholder="Write concise card or step (≤12 words)..."
+            class="flex-1 bg-slate-900 border border-slate-700 focus:border-sky-400 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none"
+          />
+          <button
+            onclick="addCustomCardToActiveZone()"
+            class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shrink-0 transition-colors"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: EXPORT STUDIO (PNG, SVG, MARKDOWN REPORT & .JSON SAVE/LOAD)  -->
+  <!-- ===================================================================== -->
+  <div
+    id="exportModal"
+    class="hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+  >
+    <div class="bg-white rounded-2xl max-w-4xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <i data-lucide="download" class="w-5 h-5 text-sky-400"></i>
+          <div>
+            <h3 class="text-base font-bold">Export Studio — PNG, Vector SVG, JSON & Markdown</h3>
+            <p class="text-xs text-slate-400">Download high-res visuals for slides/reports or save your local session file</p>
+          </div>
+        </div>
+        <button onclick="closeExportModal()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 flex-1">
+        <!-- Primary Action Toolbar -->
+        <div class="flex flex-wrap items-center gap-2 pb-4 border-b border-slate-200">
+          <button
+            onclick="exportBoardPNG()"
+            class="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-colors"
+          >
+            <i data-lucide="image" class="w-4 h-4"></i>
+            <span>Download 2x PNG</span>
+          </button>
+
+          <button
+            onclick="exportBoardSVG()"
+            class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-colors"
+          >
+            <i data-lucide="file-code-2" class="w-4 h-4"></i>
+            <span>Download Vector .SVG</span>
+          </button>
+
+          <button
+            onclick="downloadJsonFile()"
+            class="px-3.5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-colors"
+          >
+            <i data-lucide="hard-drive-download" class="w-4 h-4"></i>
+            <span>Save Board (.json)</span>
+          </button>
+
+          <label class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
+            <i data-lucide="upload" class="w-4 h-4"></i>
+            <span>Load Board (.json)</span>
+            <input type="file" accept=".json" onchange="uploadJsonFile(event)" class="hidden" />
+          </label>
+
+          <button
+            onclick="copyMarkdownToClipboard()"
+            class="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 ml-auto transition-colors"
+          >
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span>Copy Markdown Report</span>
+          </button>
+        </div>
+
+        <!-- PNG / SVG Visual Configuration Options -->
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-4">
+            <label class="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
+              <input
+                type="checkbox"
+                id="exportIncludeStepNumbers"
+                checked
+                onchange="refreshExportPreview()"
+                class="rounded border-slate-300 text-sky-600 focus:ring-sky-500 w-4 h-4"
+              />
+              <span>Include Yellow 1–11 Step Badges</span>
+            </label>
+
+            <label class="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
+              <input
+                type="checkbox"
+                id="exportIncludeMetadataHeader"
+                checked
+                onchange="refreshExportPreview()"
+                class="rounded border-slate-300 text-sky-600 focus:ring-sky-500 w-4 h-4"
+              />
+              <span>Include Top Metadata Header Bar</span>
+            </label>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label for="exportTeamNameInput" class="text-xs font-medium text-slate-600">Team / Author:</label>
+            <input
+              type="text"
+              id="exportTeamNameInput"
+              value="AU BTECH Sprint Group"
+              oninput="updateTeamName(this.value)"
+              placeholder="e.g. Group 4 (Anders, Mette)"
+              class="px-2.5 py-1 text-xs rounded border border-slate-300 bg-white text-slate-900 focus:outline-none focus:border-sky-500 w-48"
+            />
+          </div>
+        </div>
+
+        <!-- Two-Column Preview: Live Vector Graphic Preview & Markdown Report -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="flex flex-col">
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="text-xs font-mono uppercase text-slate-500 font-bold">
+                Live Vector SVG / PNG Snapshot Preview
+              </label>
+              <span class="text-[11px] font-mono text-emerald-600 font-semibold">Retina 2x Ready</span>
+            </div>
+            <div
+              id="svgPreviewContainer"
+              class="w-full h-72 bg-slate-200/80 rounded-xl border border-slate-300 overflow-auto p-2 flex items-start justify-center shadow-inner"
+            >
+              <!-- Populated dynamically by refreshExportPreview() -->
+            </div>
+          </div>
+
+          <div class="flex flex-col">
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="text-xs font-mono uppercase text-slate-500 font-bold">
+                Generated 11-Step Markdown Summary
+              </label>
+              <span class="text-[11px] font-mono text-slate-400">Ready for thesis / report appendix</span>
+            </div>
+            <textarea
+              id="exportMarkdownTextarea"
+              readonly
+              class="w-full h-72 p-3.5 font-mono text-xs bg-slate-950 text-slate-100 rounded-xl border border-slate-800 focus:outline-none leading-relaxed"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION DATA & INTERACTIVE LOGIC                                  -->
+  <!-- ===================================================================== -->
+  <script>
+    // -----------------------------------------------------------------------
+    // 1. ALL 13 OFFICIAL 33A AI CAPABILITY CARDS (Ordered Simple #1 -> Complex #13)
+    //    Exact titles and color spectrum from image_988b7b.png & image_988b5e.png
+    // -----------------------------------------------------------------------
+    const AI_CAPABILITY_CARDS = [
+      {
+        id: 'ai-1',
+        number: 1,
+        title: 'AI FINDS AND ORGANIZES INFORMATION',
+        color: '#d4a72c',
+        complexity: 'Rather simple',
+        desc: 'Clusters, tags, or retrieves relevant documents and records.'
+      },
+      {
+        id: 'ai-2',
+        number: 2,
+        title: 'AI GAINS INSIGHTS FROM BIG DATA AND UNDERSTANDS THE PAST AND PRESENT',
+        color: '#d97538',
+        complexity: 'Rather simple',
+        desc: 'Detects patterns and anomalies across large historical datasets.'
+      },
+      {
+        id: 'ai-3',
+        number: 3,
+        title: 'AI PERFORMS SIMPLE TASKS',
+        color: '#c9242b',
+        complexity: 'Simple',
+        desc: 'Automates repetitive rule-based and routine administrative steps.'
+      },
+      {
+        id: 'ai-4',
+        number: 4,
+        title: 'AI MAKES DECISIONS AND RECOMMENDATIONS',
+        color: '#c82373',
+        complexity: 'Moderate',
+        desc: 'Ranks options, scores candidates, or suggests next-best actions.'
+      },
+      {
+        id: 'ai-5',
+        number: 5,
+        title: 'AI SEES',
+        color: '#7a1e67',
+        complexity: 'Moderate',
+        desc: 'Recognizes objects, defects, faces, or visual layouts in images/video.'
+      },
+      {
+        id: 'ai-6',
+        number: 6,
+        title: 'AI READS',
+        color: '#643a82',
+        complexity: 'Moderate',
+        desc: 'Extracts meaning, entities, and sentiment from written text and PDFs.'
+      },
+      {
+        id: 'ai-7',
+        number: 7,
+        title: 'AI CHATS AND TALKS',
+        color: '#524385',
+        complexity: 'Moderate',
+        desc: 'Holds natural conversational dialogue with users or customers.'
+      },
+      {
+        id: 'ai-8',
+        number: 8,
+        title: 'AI HEARS AND UNDERSTANDS SPEECH',
+        color: '#565b99',
+        complexity: 'Moderate-High',
+        desc: 'Transcribes voice audio and detects spoken intent or tone.'
+      },
+      {
+        id: 'ai-9',
+        number: 9,
+        title: 'AI SENSES THE ENVIRONMENT',
+        color: '#2f6ea8',
+        complexity: 'Complex',
+        desc: 'Processes IoT telemetry, radar, temperature, or vibration streams.'
+      },
+      {
+        id: 'ai-10',
+        number: 10,
+        title: 'AI CREATES',
+        color: '#3e7d8c',
+        complexity: 'Complex',
+        desc: 'Generates new text drafts, code, summaries, or visual designs.'
+      },
+      {
+        id: 'ai-11',
+        number: 11,
+        title: 'AI OPTIMIZES COMPLEX PROCESSES',
+        color: '#48ada6',
+        complexity: 'Complex',
+        desc: 'Balances multi-variable schedules, routing, or supply chains.'
+      },
+      {
+        id: 'ai-12',
+        number: 12,
+        title: 'AI FORECASTS',
+        color: '#4dad69',
+        complexity: 'Rather complex',
+        desc: 'Predicts future demand, equipment failure, or market trends.'
+      },
+      {
+        id: 'ai-13',
+        number: 13,
+        title: 'AI CONTROLS MACHINES AND ROBOTS',
+        color: '#7ec242',
+        complexity: 'Rather complex',
+        desc: 'Steers autonomous vehicles, drones, or physical factory actuators.'
+      }
+    ];
+
+    // -----------------------------------------------------------------------
+    // 2. ALL 18 OFFICIAL 33A ETHICS CARDS (Exact match to image_98391c.png)
+    // -----------------------------------------------------------------------
+    const ETHICS_CARDS = [
+      { id: 'eth-1', title: 'FAIRNESS', icon: 'scale', desc: 'All people are treated fairly without racial, gender, or other bias.' },
+      { id: 'eth-2', title: 'DATA & SYSTEM SECURITY', icon: 'database', desc: 'Data is protected and systems operate in a secure, resilient way.' },
+      { id: 'eth-3', title: 'PRIVACY', icon: 'lock', desc: 'People have the right to privacy and control over their personal data.' },
+      { id: 'eth-4', title: 'PRESERVE HUMAN DOMINANCE', icon: 'user-check', desc: 'Humans stay more powerful and remain in control of the AI.' },
+      { id: 'eth-5', title: 'GREEN', icon: 'leaf', desc: 'Having a neutral or positive effect on nature and energy use.' },
+      { id: 'eth-6', title: 'DIGNITY', icon: 'heart-handshake', desc: 'People are always treated respectfully with human dignity.' },
+      { id: 'eth-7', title: "PEOPLE'S RELATIONSHIPS", icon: 'users', desc: 'Enhancing, not distracting from, genuine human relationships.' },
+      { id: 'eth-8', title: 'NO MISUSE', icon: 'alert-triangle', desc: 'Prevent harmful use or extreme overuse outside intended purpose.' },
+      { id: 'eth-9', title: 'EMPOWERING UNDERSERVED ONES', icon: 'hand-helping', desc: 'Positive impact on people who might otherwise be left behind.' },
+      { id: 'eth-10', title: 'BENEFICIAL', icon: 'sparkles', desc: 'The common good is promoted for users and society.' },
+      { id: 'eth-11', title: "PEOPLE'S SAFETY", icon: 'shield-check', desc: 'People are physically and mentally safe when using the system.' },
+      { id: 'eth-12', title: 'RIGHT INCENTIVES', icon: 'award', desc: 'No perverse incentives that trigger poor human or AI behavior.' },
+      { id: 'eth-13', title: 'ACCOUNTABILITY', icon: 'user-cog', desc: 'Clear which person is responsible for every action and AI decision.' },
+      { id: 'eth-14', title: 'DISPLACEMENT STRATEGY', icon: 'refresh-cw', desc: 'Employees whose tasks change receive training for better work.' },
+      { id: 'eth-15', title: 'HUMAN AUGMENTATION, HUMAN CONTROL', icon: 'hand', desc: 'Human-in-the-loop review to approve or override AI decisions.' },
+      { id: 'eth-16', title: 'CHECK, GOVERNANCE', icon: 'landmark', desc: 'Regular auditing and a clear mechanism of redress if harmed.' },
+      { id: 'eth-17', title: 'EXPLAINABILITY, TRANSPARENCY', icon: 'search-check', desc: 'Explains how AI makes a decision in plain human language.' },
+      { id: 'eth-18', title: 'IDENTITY', icon: 'id-card', desc: 'AI that communicates with humans clearly identifies itself as AI.' }
+    ];
+
+    // -----------------------------------------------------------------------
+    // 3. STARTER DECKS FOR ROLES (3), FRICTIONS (2), RESOURCES (6), VALUES (8/9)
+    // -----------------------------------------------------------------------
+    const OTHER_DECKS = {
+      role: [
+        { id: 'role-1', title: 'HR Recruiter', desc: 'Screens incoming applications and schedules interviews.' },
+        { id: 'role-2', title: 'Job Applicant', desc: 'Submits CV and cover letter hoping for fair evaluation.' },
+        { id: 'role-3', title: 'Hiring Manager', desc: 'Reviews final shortlist and conducts in-person interviews.' },
+        { id: 'role-4', title: 'Support Engineer', desc: 'Answers technical troubleshooting tickets for customers.' },
+        { id: 'role-5', title: 'Data / IT Owner', desc: 'Maintains ERP/ATS database access and security compliance.' },
+        { id: 'role-6', title: 'Operations Lead', desc: 'Monitors team KPIs, quality, and process bottlenecks.' }
+      ],
+      friction: [
+        { id: 'fric-1', title: 'Manual CV Bottleneck', desc: 'Reading 250+ CVs and cover letters per role takes 14 hours.' },
+        { id: 'fric-2', title: 'Inconsistent Screening Criteria', desc: 'Tired reviewers unintentionally apply different screening standards.' },
+        { id: 'fric-3', title: 'Slow Candidate Response', desc: 'Top candidates drop out because first screening takes 2 weeks.' },
+        { id: 'fric-4', title: '18-Min Manual PDF Search', desc: 'Technicians hunt through 400-page manuals during live calls.' },
+        { id: 'fric-5', title: 'High Error / Rework Rate', desc: '14% of orders require manual rework due to wrong part numbers.' }
+      ],
+      resource: [
+        { id: 'res-1', title: 'Incoming CVs & Cover Letters', desc: 'PDF and Word resumes submitted via the company career portal.' },
+        { id: 'res-2', title: 'Job Requirements Rubric', desc: 'Structured list of required skills, experience, and criteria.' },
+        { id: 'res-3', title: 'Applicant Tracking System (ATS)', desc: 'Existing HR workflow software holding candidate profiles.' },
+        { id: 'res-4', title: '1,400 PDF Service Manuals', desc: 'Internal technical documentation and wiring diagrams.' },
+        { id: 'res-5', title: 'Historical Ticket Logs', desc: '45,000 past resolved support tickets with verified answers.' }
+      ],
+      value: [
+        { id: 'val-1', title: '70% Faster First Screening', desc: 'Cuts initial CV review time from 14 hours down to 4 hours.' },
+        { id: 'val-2', title: 'Higher Shortlist Quality', desc: 'Consistent rubric matching surfaces qualified candidates faster.' },
+        { id: 'val-3', title: 'Better Candidate Experience', desc: 'Every applicant gets timely feedback within 48 hours.' },
+        { id: 'out-1', title: '[Output Map] Ranked Shortlist Dashboard', desc: 'Visual table showing top 10 candidates with skill-match citations.' },
+        { id: 'out-2', title: '[Output Map] Cited Answer Draft', desc: 'Sidebar card showing recommended spare part ID + PDF page link.' }
+      ]
+    };
+
+    // -----------------------------------------------------------------------
+    // 4. THE 11 ZONES METADATA (Exact match to image_988fb1 & image_988bd6)
+    // -----------------------------------------------------------------------
+    const ZONES_METADATA = {
+      1: {
+        step: 1,
+        title: 'Current Manual Process:',
+        subtitle: 'List the current manual steps (Before AI)',
+        deckTab: 'friction',
+        type: 'steps'
+      },
+      2: {
+        step: 2,
+        title: '[Friction Cards]',
+        subtitle: 'Place 1–3 cards showing the pain points',
+        deckTab: 'friction',
+        type: 'cards',
+        maxCards: 3
+      },
+      3: {
+        step: 3,
+        title: '[Role Cards]',
+        subtitle: 'Place cards representing WHO could/is involved here',
+        deckTab: 'role',
+        type: 'cards'
+      },
+      4: {
+        step: 4,
+        title: '[AI Capability Card]',
+        subtitle: 'Place the ONE card representing the AI solution',
+        deckTab: 'capability',
+        type: 'single-capability',
+        maxCards: 1
+      },
+      5: {
+        step: 5,
+        title: 'The AI intervention:',
+        subtitle: '1. [How AI handles data]  2. [Human-AI handoff]',
+        deckTab: 'capability',
+        type: 'steps'
+      },
+      6: {
+        step: 6,
+        title: '[Resource Cards]',
+        subtitle: 'Place cards representing DATA/TOOLS available here.',
+        deckTab: 'resource',
+        type: 'cards'
+      },
+      7: {
+        step: 7,
+        title: 'The Optimized Process:',
+        subtitle: 'List the new 1–3 steps after AI transformation',
+        deckTab: 'value',
+        type: 'steps'
+      },
+      8: {
+        step: 8,
+        title: '[Value Cards]',
+        subtitle: 'Place cards representing the GAINS (Time/Quality) here.',
+        deckTab: 'value',
+        type: 'cards'
+      },
+      9: {
+        step: 9,
+        title: '[Output map]',
+        subtitle: 'Visualizing the final result.',
+        deckTab: 'value',
+        type: 'cards'
+      },
+      10: {
+        step: 10,
+        title: 'Ethics Cards',
+        subtitle: 'Place the global ethics/guardrail card here (e.g., Transparency, Accountability).',
+        deckTab: 'ethics',
+        type: 'ethics-cards'
+      },
+      11: {
+        step: 11,
+        title: 'Ethical Guardrails',
+        subtitle: 'List 2–3 specific rules for this project based on the AI Reviewer’s feedback (e.g., "Human must verify all generated text before sending").',
+        deckTab: 'ethics',
+        type: 'steps'
+      }
+    };
+
+    // -----------------------------------------------------------------------
+    // 5. PRELOADED CLASSROOM TEMPLATES (HR Screening from image_98393f.jpg)
+    // -----------------------------------------------------------------------
+    const TEMPLATES = {
+      hr: {
+        projectTitle: 'HR Candidate Screening (33A Sprint)',
+        zones: {
+          1: [
+            'Perform first screening of incoming job applications.',
+            'Read through CVs, cover letters, and LinkedIn profiles manually.',
+            'Compile video-interview shortlist and invite final candidates.'
+          ],
+          2: [
+            { id: 'fric-1', title: 'Manual CV Bottleneck', desc: 'Reading 250+ CVs and cover letters per role takes 14 hours.' },
+            { id: 'fric-2', title: 'Inconsistent Screening Criteria', desc: 'Tired reviewers unintentionally apply different screening standards.' }
+          ],
+          3: [
+            { id: 'role-1', title: 'HR Recruiter', desc: 'Screens incoming applications and schedules interviews.' },
+            { id: 'role-2', title: 'Job Applicant', desc: 'Submits CV and cover letter hoping for fair evaluation.' }
+          ],
+          4: [
+            AI_CAPABILITY_CARDS[5] // #6 AI READS
+          ],
+          5: [
+            'AI reads CVs and extracts structured skill matches against job rubric.',
+            'Recruiter reviews AI shortlist and overrides any borderline profiles.'
+          ],
+          6: [
+            { id: 'res-1', title: 'Incoming CVs & Cover Letters', desc: 'PDF and Word resumes submitted via the company career portal.' },
+            { id: 'res-2', title: 'Job Requirements Rubric', desc: 'Structured list of required skills, experience, and criteria.' }
+          ],
+          7: [
+            'Applications arrive and AI pre-extracts structured skill evidence.',
+            'HR employee verifies shortlist and conducts video interviews.',
+            'HR invites final verified candidates for in-person interviews.'
+          ],
+          8: [
+            { id: 'val-1', title: '70% Faster First Screening', desc: 'Cuts initial CV review time from 14 hours down to 4 hours.' },
+            { id: 'val-3', title: 'Better Candidate Experience', desc: 'Every applicant gets timely feedback within 48 hours.' }
+          ],
+          9: [
+            { id: 'out-1', title: '[Output Map] Ranked Shortlist Dashboard', desc: 'Visual table showing top 10 candidates with skill-match citations.' }
+          ],
+          10: [
+            ETHICS_CARDS[0],  // FAIRNESS
+            ETHICS_CARDS[14], // HUMAN AUGMENTATION, HUMAN CONTROL
+            ETHICS_CARDS[16]  // EXPLAINABILITY, TRANSPARENCY
+          ],
+          11: [
+            'Strip candidate names, photos, and age before AI parses CVs to prevent bias.',
+            'AI never auto-rejects; a human recruiter must verify before sending any email.',
+            'Show exact CV bullet citations for every AI skill-match score.'
+          ]
+        }
+      },
+
+      support: {
+        projectTitle: 'Spare Parts Manual RAG Assistant',
+        zones: {
+          1: [
+            'Receive live customer call about broken CNC machine.',
+            'Manually search 400-page PDF manuals for spare part numbers.',
+            'Paste part ID into ticket and send quote to customer.'
+          ],
+          2: [
+            { id: 'fric-4', title: '18-Min Manual PDF Search', desc: 'Technicians hunt through 400-page manuals during live calls.' },
+            { id: 'fric-5', title: 'High Error / Rework Rate', desc: '14% of orders require manual rework due to wrong part numbers.' }
+          ],
+          3: [
+            { id: 'role-4', title: 'Support Engineer', desc: 'Answers technical troubleshooting tickets for customers.' }
+          ],
+          4: [
+            AI_CAPABILITY_CARDS[0] // #1 AI FINDS AND ORGANIZES INFORMATION
+          ],
+          5: [
+            'AI retrieves top 3 matching manual pages and part IDs by serial number.',
+            'Support engineer verifies diagram and clicks insert into ticket.'
+          ],
+          6: [
+            { id: 'res-4', title: '1,400 PDF Service Manuals', desc: 'Internal technical documentation and wiring diagrams.' },
+            { id: 'res-5', title: 'Historical Ticket Logs', desc: '45,000 past resolved support tickets with verified answers.' }
+          ],
+          7: [
+            'Customer describes fault and serial number in support ticket.',
+            'Engineer checks AI-retrieved manual page and verifies part ID.',
+            'Correct spare part is dispatched in under 7 minutes.'
+          ],
+          8: [
+            { id: 'val-s1', title: 'Cut Handle Time by 60%', desc: 'Reduces call lookup from 18 minutes down to 7 minutes.' }
+          ],
+          9: [
+            { id: 'out-2', title: '[Output Map] Cited Answer Draft', desc: 'Sidebar card showing recommended spare part ID + PDF page link.' }
+          ],
+          10: [
+            ETHICS_CARDS[12], // ACCOUNTABILITY
+            ETHICS_CARDS[14]  // HUMAN AUGMENTATION
+          ],
+          11: [
+            'Human technician must verify every torque spec and part number before sending.',
+            'Display "No confident match found" whenever retrieval score is below 80%.'
+          ]
+        }
+      },
+
+      antipattern: {
+        projectTitle: 'Anti-Pattern: "AI Magic" Sales Predictor',
+        zones: {
+          1: [
+            'Sales reps guess quarterly revenue in weekly spreadsheet meetings.',
+            'Managers manually adjust forecast numbers based on gut feeling and politics.'
+          ],
+          2: [
+            { id: 'fric-ap1', title: 'Unreliable Revenue Forecasts', desc: 'Quarterly sales predictions miss actual revenue by 35%.' }
+          ],
+          3: [
+            { id: 'role-6', title: 'Operations Lead', desc: 'Monitors team KPIs, quality, and process bottlenecks.' }
+          ],
+          4: [
+            AI_CAPABILITY_CARDS[11] // #12 AI FORECASTS
+          ],
+          5: [
+            'AI automatically predicts exact deal closure dates and fires underperforming reps.',
+            'Zero human review required because the neural network is 100% autonomous.'
+          ],
+          6: [],
+          7: [
+            'AI runs autonomously every Monday morning and emails board of directors.'
+          ],
+          8: [
+            { id: 'val-ap1', title: '100% Automated Forecasting', desc: 'Eliminates all sales management review meetings immediately.' }
+          ],
+          9: [],
+          10: [],
+          11: [
+            'None defined yet — discuss why missing Resource Data (Zone 6) and Ethics (Zone 10) breaks this case!'
+          ]
+        }
+      },
+
+      blank: {
+        projectTitle: 'Untitled AI Business Case',
+        zones: {
+          1: ['', '', ''],
+          2: [],
+          3: [],
+          4: [],
+          5: ['', ''],
+          6: [],
+          7: ['', '', ''],
+          8: [],
+          9: [],
+          10: [],
+          11: ['', '']
+        }
+      }
+    };
+
+    // -----------------------------------------------------------------------
+    // 6. APPLICATION STATE
+    // -----------------------------------------------------------------------
+    const STORAGE_KEY = 'au_btech_11zone_canvas_v2';
+
+    let appState = {
+      projectTitle: 'HR Candidate Screening (33A Sprint)',
+      teamName: 'AU BTECH Sprint Group',
+      activeStep: 4,          // Currently focused zone (1..11)
+      activeDeckTab: 'capability',
+      showYellowNumbers: true,
+      exportIncludeSteps: true,
+      exportIncludeHeader: true,
+      zones: JSON.parse(JSON.stringify(TEMPLATES.hr.zones))
+    };
+
+    // -----------------------------------------------------------------------
+    // 7. INITIALIZATION & PERSISTENCE
+    // -----------------------------------------------------------------------
+    function init() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.zones) {
+            appState = { ...appState, ...parsed };
+          }
+        } catch (e) {
+          console.warn('Failed to parse saved canvas:', e);
+        }
+      }
+
+      const titleInput = document.getElementById('projectTitleInput');
+      if (titleInput) {
+        titleInput.value = appState.projectTitle;
+        titleInput.addEventListener('input', (e) => {
+          appState.projectTitle = e.target.value;
+          saveState();
+        });
+      }
+
+      renderAll();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {}
+    }
+
+    function loadTemplate(key) {
+      const tpl = TEMPLATES[key] || TEMPLATES.hr;
+      appState.projectTitle = tpl.projectTitle;
+      appState.zones = JSON.parse(JSON.stringify(tpl.zones));
+      const titleInput = document.getElementById('projectTitleInput');
+      if (titleInput) titleInput.value = appState.projectTitle;
+      saveState();
+      renderAll();
+      showToast(`Loaded template: ${tpl.projectTitle}`);
+    }
+
+    // -----------------------------------------------------------------------
+    // 8. RENDER ALL 11 CANVAS ZONES + RIGHT-HAND CARD GRID
+    // -----------------------------------------------------------------------
+    function renderAll() {
+      for (let z = 1; z <= 11; z++) {
+        renderZone(z);
+      }
+      renderSidebarDeck();
+      updateStepIndicatorUI();
+      lucide.createIcons();
+    }
+
+    function renderZone(zoneNum) {
+      const el = document.getElementById(`zone-${zoneNum}`);
+      if (!el) return;
+
+      const meta = ZONES_METADATA[zoneNum];
+      const items = appState.zones[zoneNum] || [];
+      const isFocused = appState.activeStep === zoneNum;
+
+      if (isFocused) {
+        el.classList.add('zone-active');
+      } else {
+        el.classList.remove('zone-active');
+      }
+
+      // Optional Yellow Sequence Number Badge (Matches image_988bd6.png)
+      const yellowBadgeHTML = appState.showYellowNumbers
+        ? `<span
+             class="step-badge-yellow w-7 h-7 rounded font-mono text-sm font-extrabold flex items-center justify-center shrink-0 select-none"
+             title="Worksheet Sequence Step ${zoneNum}"
+           >${zoneNum}</span>`
+        : '';
+
+      // CASE A: NUMBERED PROCESS STEP ZONES (Zones 1, 5, 7, 11)
+      if (meta.type === 'steps') {
+        const placeholders =
+          zoneNum === 1 ? ['[Step description]', '[Step description]', '[Step description]'] :
+          zoneNum === 5 ? ['[How AI handles data]', '[Human-AI handoff]'] :
+          zoneNum === 7 ? ['[New Step 1]', '[New Step 2]', '[New Step 3]'] :
+                          ['"Human must verify all generated text before sending"', '"Log every AI override for monthly audit"'];
+
+        el.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900">${meta.title}</h3>
+                <p class="text-[11px] text-slate-700 leading-snug">${meta.subtitle}</p>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button
+                  onclick="event.stopPropagation(); addProcessStepRow(${zoneNum})"
+                  class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-semibold"
+                  title="Add step"
+                >+ Step</button>
+                ${yellowBadgeHTML}
+              </div>
+            </div>
+
+            <div class="space-y-1.5 mt-2">
+              ${items.map((stepText, idx) => {
+                const wc = countWords(stepText);
+                const overLimit = wc > 15;
+                return `
+                  <div class="flex items-center gap-1.5 bg-white/90 rounded-md px-2 py-1 border ${overLimit ? 'border-amber-500 ring-1 ring-amber-400' : 'border-slate-300/90'} shadow-2xs">
+                    <span class="font-mono text-xs font-bold text-slate-700 w-4 shrink-0">${idx + 1}.</span>
+                    <input
+                      type="text"
+                      value="${escapeHtml(stepText)}"
+                      placeholder="${placeholders[idx] || '[Step description]'}"
+                      oninput="updateProcessStepText(${zoneNum}, ${idx}, this.value)"
+                      onclick="event.stopPropagation(); selectCanvasZone(${zoneNum})"
+                      class="flex-1 bg-transparent text-xs text-slate-900 font-medium focus:outline-none"
+                    />
+                    <span class="text-[10px] font-mono ${overLimit ? 'text-amber-600 font-bold' : 'text-slate-400'} shrink-0" title="Target: ≤ 15 words per step">
+                      ${wc}w
+                    </span>
+                    ${items.length > 1 ? `
+                      <button
+                        onclick="event.stopPropagation(); removeProcessStepRow(${zoneNum}, ${idx})"
+                        class="text-slate-400 hover:text-rose-600 p-0.5"
+                        title="Remove step"
+                      >
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                      </button>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // CASE B: CARD DROP ZONES (Zones 2, 3, 4, 6, 8, 9, 10)
+      el.innerHTML = `
+        <div class="flex flex-col h-full justify-between">
+          <!-- Zone Header -->
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900">${meta.title}</h3>
+              <p class="text-xs text-slate-700 leading-snug">${meta.subtitle}</p>
+            </div>
+            ${yellowBadgeHTML}
+          </div>
+
+          <!-- Placed Cards Area -->
+          <div class="flex-1 flex flex-col justify-center">
+            ${items.length === 0 ? `
+              <div class="border-2 border-dashed border-slate-400/70 rounded-lg p-3 text-center my-auto bg-white/40 hover:bg-white/70 transition-colors">
+                <p class="text-xs font-semibold text-slate-600">
+                  Click here or drag a card from the right panel
+                </p>
+                <p class="text-[11px] text-slate-500 mt-0.5">
+                  ${zoneNum === 4 ? 'Select ONE of the 13 AI Capability Cards →' : zoneNum === 10 ? 'Select from the 18 Ethics Cards →' : 'Use the right-hand Card Grid →'}
+                </p>
+              </div>
+            ` : `
+              <div class="grid ${zoneNum === 4 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'} gap-2">
+                ${items.map((card, idx) => renderPlacedCardHTML(zoneNum, card, idx)).join('')}
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPlacedCardHTML(zoneNum, card, idx) {
+      // 1. Official Colored AI Capability Card (Zone 4)
+      if (card.color) {
+        return `
+          <div
+            style="background-color: ${card.color};"
+            class="text-white rounded-lg p-3 shadow-md flex flex-col justify-between min-h-[96px] relative group"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <span class="text-[10px] font-mono uppercase tracking-wider bg-black/25 px-1.5 py-0.5 rounded font-bold">
+                AI CAPABILITY #${card.number} • ${card.complexity}
+              </span>
+              <button
+                onclick="event.stopPropagation(); removeCardFromZone(${zoneNum}, ${idx})"
+                class="p-1 rounded bg-black/20 hover:bg-black/40 text-white"
+                title="Remove card"
+              >
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            <div class="font-extrabold text-xs sm:text-sm tracking-wide uppercase mt-1.5 leading-snug">
+              ${escapeHtml(card.title)}
+            </div>
+            <p class="text-[11px] text-white/90 mt-1 leading-snug">${escapeHtml(card.desc || '')}</p>
+          </div>
+        `;
+      }
+
+      // 2. Official White/Black Illustrated Ethics Card (Zone 10)
+      if (zoneNum === 10 || (card.id && card.id.startsWith('eth-'))) {
+        return `
+          <div class="bg-white text-slate-900 rounded-lg p-2.5 border-2 border-slate-800 shadow-xs flex items-start gap-2.5 relative">
+            <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center shrink-0 text-slate-900">
+              <i data-lucide="${card.icon || 'scale'}" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-[11px] font-extrabold uppercase tracking-wide text-slate-900 truncate">
+                ${escapeHtml(card.title)}
+              </div>
+              <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+                ${escapeHtml(card.desc || '')}
+              </p>
+            </div>
+            <button
+              onclick="event.stopPropagation(); removeCardFromZone(${zoneNum}, ${idx})"
+              class="text-slate-400 hover:text-rose-600 p-0.5 shrink-0"
+              title="Remove card"
+            >
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        `;
+      }
+
+      // 3. Standard Role / Friction / Resource / Value / Output Card
+      const accentBorder =
+        zoneNum === 2 ? 'border-l-4 border-l-rose-500' :
+        zoneNum === 3 ? 'border-l-4 border-l-sky-600' :
+        zoneNum === 6 ? 'border-l-4 border-l-amber-500' :
+                        'border-l-4 border-l-emerald-600';
+
+      return `
+        <div class="bg-white rounded-lg p-2.5 border border-slate-300 ${accentBorder} shadow-2xs flex flex-col justify-between relative">
+          <div class="flex items-start justify-between gap-1">
+            <span class="text-xs font-bold text-slate-900 leading-snug">${escapeHtml(card.title)}</span>
+            <button
+              onclick="event.stopPropagation(); removeCardFromZone(${zoneNum}, ${idx})"
+              class="text-slate-400 hover:text-rose-600 p-0.5 shrink-0"
+              title="Remove card"
+            >
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          ${card.desc ? `<p class="text-[11px] text-slate-600 mt-1 leading-tight">${escapeHtml(card.desc)}</p>` : ''}
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // 9. RENDER RIGHT-HAND INTERACTIVE CARD GRID (Fitts's Law & Hick's Law)
+    // -----------------------------------------------------------------------
+    function renderSidebarDeck() {
+      const tab = appState.activeDeckTab;
+      const meta = ZONES_METADATA[appState.activeStep] || ZONES_METADATA[4];
+
+      // Update Sidebar Top Header safely
+      const stepBadgeEl = document.getElementById('sidebarStepBadge');
+      const titleEl = document.getElementById('sidebarTitle');
+      const subtitleEl = document.getElementById('sidebarSubtitle');
+      const customLabelEl = document.getElementById('customCardTargetLabel');
+
+      if (stepBadgeEl) stepBadgeEl.textContent = appState.activeStep;
+      if (titleEl) titleEl.textContent = `Step ${appState.activeStep}: ${meta.title.replace(/[\[\]]/g, '')}`;
+      if (subtitleEl) subtitleEl.textContent = meta.subtitle;
+      if (customLabelEl) customLabelEl.textContent = `+ Custom Card for Step ${appState.activeStep}`;
+
+      // Highlight active category tab
+      const tabs = ['capability', 'ethics', 'role', 'friction', 'resource', 'value'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (!btn) return;
+        if (t === tab) {
+          btn.className = 'deck-tab px-2 py-1.5 rounded text-[11px] font-bold bg-sky-600 text-white shadow-2xs text-center truncate';
+        } else {
+          btn.className = 'deck-tab px-2 py-1.5 rounded text-[11px] font-medium text-slate-400 hover:bg-slate-800 hover:text-white text-center truncate';
+        }
+      });
+
+      // Toggle Complexity Bar visibility (shown for the 13 AI Capability Cards)
+      const compBar = document.getElementById('deckComplexityBar');
+      if (compBar) {
+        compBar.style.display = tab === 'capability' ? 'flex' : 'none';
+      }
+
+      const grid = document.getElementById('cardGridContainer');
+      if (!grid) return;
+
+      // TAB 1: 13 AI CAPABILITY CARDS (Color-coded #1 Gold to #13 Lime Green)
+      if (tab === 'capability') {
+        const placedIds = (appState.zones[4] || []).map(c => c.id);
+        grid.innerHTML = AI_CAPABILITY_CARDS.map(card => {
+          const isPlaced = placedIds.includes(card.id);
+          return `
+            <div
+              draggable="true"
+              ondragstart="handleCardDragStart(event, 'capability', '${card.id}', 4)"
+              onclick="dropCardToZone('capability', '${card.id}', 4)"
+              style="background-color: ${card.color};"
+              class="card-lift rounded-lg p-3 text-white cursor-pointer flex flex-col justify-between min-h-[128px] relative shadow-md ${isPlaced ? 'ring-3 ring-yellow-300' : ''}"
+            >
+              <div>
+                <div class="flex items-center justify-between text-[10px] font-mono opacity-90">
+                  <span>#${card.number} • ${card.complexity}</span>
+                  ${isPlaced ? `<span class="bg-yellow-300 text-slate-950 font-bold px-1.5 py-0.2 rounded">SELECTED</span>` : ''}
+                </div>
+                <h4 class="font-extrabold text-xs uppercase tracking-wide mt-1.5 leading-snug">
+                  ${escapeHtml(card.title)}
+                </h4>
+              </div>
+
+              <div class="mt-2 pt-2 border-t border-white/20 flex items-center justify-between">
+                <span class="text-[10px] text-white/90 line-clamp-2 leading-tight flex-1 pr-1">${escapeHtml(card.desc)}</span>
+                <span class="px-2 py-0.5 rounded bg-black/25 hover:bg-black/40 text-[10px] font-mono font-bold shrink-0">
+                  + Zone 4
+                </span>
+              </div>
+            </div>
+          `;
+        }).join('');
+        return;
+      }
+
+      // TAB 2: 18 ETHICS CARDS (White tactile cards matching image_98391c.png)
+      if (tab === 'ethics') {
+        const placedIds = (appState.zones[10] || []).map(c => c.id);
+        grid.innerHTML = ETHICS_CARDS.map(card => {
+          const isPlaced = placedIds.includes(card.id);
+          return `
+            <div
+              draggable="true"
+              ondragstart="handleCardDragStart(event, 'ethics', '${card.id}', 10)"
+              onclick="dropCardToZone('ethics', '${card.id}', 10)"
+              class="card-lift bg-white text-slate-900 rounded-lg p-3 cursor-pointer flex flex-col justify-between min-h-[132px] border-2 ${isPlaced ? 'border-emerald-500 ring-2 ring-emerald-400' : 'border-slate-300'} shadow-sm"
+            >
+              <div class="flex flex-col items-center text-center">
+                <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-900 mb-1.5">
+                  <i data-lucide="${card.icon}" class="w-4 h-4"></i>
+                </div>
+                <h4 class="font-extrabold text-[11px] uppercase tracking-wide text-slate-900 leading-tight">
+                  ${escapeHtml(card.title)}
+                </h4>
+                <p class="text-[10px] text-slate-600 mt-1 leading-snug line-clamp-3">
+                  ${escapeHtml(card.desc)}
+                </p>
+              </div>
+              <div class="mt-2 pt-1.5 border-t border-slate-200 flex items-center justify-between text-[10px] font-mono">
+                <span class="text-slate-400">33A</span>
+                <span class="font-bold ${isPlaced ? 'text-emerald-600' : 'text-sky-700'}">
+                  ${isPlaced ? '✓ In Zone 10' : '+ Drop to 10'}
+                </span>
+              </div>
+            </div>
+          `;
+        }).join('');
+        return;
+      }
+
+      // TAB 3..6: ROLE (Zone 3), FRICTION (Zone 2), RESOURCE (Zone 6), VALUE/OUTPUT (Zones 8 & 9)
+      const list = OTHER_DECKS[tab] || [];
+      const defaultTargetZone =
+        tab === 'role' ? 3 :
+        tab === 'friction' ? 2 :
+        tab === 'resource' ? 6 :
+        (appState.activeStep === 9 ? 9 : 8);
+
+      grid.innerHTML = list.map(card => {
+        const targetZ = card.id.startsWith('out-') ? 9 : defaultTargetZone;
+        return `
+          <div
+            draggable="true"
+            ondragstart="handleCardDragStart(event, '${tab}', '${card.id}', ${targetZ})"
+            onclick="dropCardToZone('${tab}', '${card.id}', ${targetZ})"
+            class="card-lift bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-400 rounded-lg p-3 cursor-pointer flex flex-col justify-between min-h-[115px]"
+          >
+            <div>
+              <span class="text-[10px] font-mono uppercase text-sky-400 font-bold">Zone ${targetZ} Card</span>
+              <h4 class="text-xs font-bold text-white mt-1 leading-snug">${escapeHtml(card.title)}</h4>
+              <p class="text-[11px] text-slate-300 mt-1 leading-snug">${escapeHtml(card.desc)}</p>
+            </div>
+            <div class="mt-2 pt-1.5 border-t border-slate-700/80 flex justify-end">
+              <span class="text-[10px] font-mono font-bold text-amber-300">+ Drop to Zone ${targetZ}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // -----------------------------------------------------------------------
+    // 10. ZONE SELECTION, DRAG-AND-DROP & 1-CLICK CARD PLACEMENT
+    // -----------------------------------------------------------------------
+    function selectCanvasZone(zoneNum) {
+      appState.activeStep = zoneNum;
+      const meta = ZONES_METADATA[zoneNum];
+      if (meta && meta.deckTab) {
+        appState.activeDeckTab = meta.deckTab;
+      }
+      renderAll();
+    }
+
+    function setDeckCategory(tabName, targetZoneNum) {
+      appState.activeDeckTab = tabName;
+      if (targetZoneNum) {
+        appState.activeStep = targetZoneNum;
+      }
+      renderAll();
+    }
+
+    function findCardObject(deckType, cardId) {
+      if (deckType === 'capability') return AI_CAPABILITY_CARDS.find(c => c.id === cardId);
+      if (deckType === 'ethics') return ETHICS_CARDS.find(c => c.id === cardId);
+      return (OTHER_DECKS[deckType] || []).find(c => c.id === cardId);
+    }
+
+    function dropCardToZone(deckType, cardId, targetZone) {
+      const card = findCardObject(deckType, cardId);
+      if (!card) return;
+
+      const z = targetZone || appState.activeStep;
+      const meta = ZONES_METADATA[z];
+
+      // Zone 4 enforces placing ONE primary AI Capability Card
+      if (z === 4) {
+        appState.zones[4] = [JSON.parse(JSON.stringify(card))];
+        appState.activeStep = 4;
+        saveState();
+        renderAll();
+        showToast(`Placed "${card.title}" as the primary AI solution in Zone 4!`);
+        return;
+      }
+
+      if (!Array.isArray(appState.zones[z])) {
+        appState.zones[z] = [];
+      }
+
+      // Check Friction 1-3 card guideline
+      if (z === 2 && appState.zones[2].length >= 3) {
+        showToast('Zone 2 recommends 1–3 Friction Cards (Miller’s Law). Remove one first.', 'amber');
+        return;
+      }
+
+      // Prevent duplicate card IDs in same zone
+      if (appState.zones[z].some(c => c.id === card.id)) {
+        showToast('Card is already placed in this zone.', 'amber');
+        return;
+      }
+
+      appState.zones[z].push(JSON.parse(JSON.stringify(card)));
+      appState.activeStep = z;
+      saveState();
+      renderAll();
+    }
+
+    function removeCardFromZone(zoneNum, index) {
+      if (!Array.isArray(appState.zones[zoneNum])) return;
+      appState.zones[zoneNum].splice(index, 1);
+      saveState();
+      renderAll();
+    }
+
+    // HTML5 Drag and Drop Handlers
+    let draggedPayload = null;
+
+    function handleCardDragStart(event, deckType, cardId, defaultZone) {
+      draggedPayload = { deckType, cardId, defaultZone };
+      event.dataTransfer.setData('text/plain', cardId);
+    }
+
+    function handleZoneDragOver(event, zoneNum) {
+      event.preventDefault();
+      const el = document.getElementById(`zone-${zoneNum}`);
+      if (el) el.classList.add('zone-dragover');
+    }
+
+    function handleZoneDragLeave(event, zoneNum) {
+      const el = document.getElementById(`zone-${zoneNum}`);
+      if (el) el.classList.remove('zone-dragover');
+    }
+
+    function handleZoneDrop(event, zoneNum) {
+      event.preventDefault();
+      const el = document.getElementById(`zone-${zoneNum}`);
+      if (el) el.classList.remove('zone-dragover');
+      if (!draggedPayload) return;
+
+      dropCardToZone(draggedPayload.deckType, draggedPayload.cardId, zoneNum);
+      draggedPayload = null;
+    }
+
+    // -----------------------------------------------------------------------
+    // 11. CUSTOM CARD & PROCESS STEP EDITING
+    // -----------------------------------------------------------------------
+    function updateCustomCardWordCount(text) {
+      const wc = countWords(text);
+      const badge = document.getElementById('customCardWordCounter');
+      if (!badge) return;
+      if (wc <= 12) {
+        badge.textContent = `${wc} / 12 words (Optimal)`;
+        badge.className = 'text-[10px] font-mono text-emerald-400';
+      } else {
+        badge.textContent = `${wc} / 12 words (Too long for quick scan!)`;
+        badge.className = 'text-[10px] font-mono text-amber-400 font-bold';
+      }
+    }
+
+    function addCustomCardToActiveZone() {
+      const input = document.getElementById('customCardInput');
+      if (!input || !input.value.trim()) return;
+      const text = input.value.trim();
+      const z = appState.activeStep;
+      const meta = ZONES_METADATA[z];
+
+      if (meta.type === 'steps') {
+        appState.zones[z].push(text);
+      } else if (z === 4) {
+        appState.zones[4] = [{
+          id: 'custom-' + Date.now(),
+          number: 'Custom',
+          title: text.toUpperCase(),
+          color: '#2563eb',
+          complexity: 'Custom',
+          desc: 'Custom AI capability defined by team.'
+        }];
+      } else {
+        appState.zones[z].push({
+          id: 'custom-' + Date.now(),
+          title: text,
+          desc: '',
+          icon: 'check-circle-2'
+        });
+      }
+
+      input.value = '';
+      updateCustomCardWordCount('');
+      saveState();
+      renderAll();
+      showToast(`Added to Step ${z}!`);
+    }
+
+    function updateProcessStepText(zoneNum, idx, value) {
+      if (!Array.isArray(appState.zones[zoneNum])) return;
+      appState.zones[zoneNum][idx] = value;
+      saveState();
+    }
+
+    function addProcessStepRow(zoneNum) {
+      if (!Array.isArray(appState.zones[zoneNum])) appState.zones[zoneNum] = [];
+      appState.zones[zoneNum].push('');
+      saveState();
+      renderZone(zoneNum);
+      lucide.createIcons();
+    }
+
+    function removeProcessStepRow(zoneNum, idx) {
+      if (!Array.isArray(appState.zones[zoneNum])) return;
+      appState.zones[zoneNum].splice(idx, 1);
+      saveState();
+      renderZone(zoneNum);
+      lucide.createIcons();
+    }
+
+    // -----------------------------------------------------------------------
+    // 12. 1-TO-11 SEQUENCE STEPPER CONTROLS
+    // -----------------------------------------------------------------------
+    function toggleYellowNumbers() {
+      appState.showYellowNumbers = !appState.showYellowNumbers;
+      const label = document.getElementById('yellowBadgeToggleLabel');
+      if (label) {
+        label.textContent = appState.showYellowNumbers ? 'Order: ON' : 'Order: OFF';
+      }
+      renderAll();
+    }
+
+    function stepGuideMove(delta) {
+      let next = appState.activeStep + delta;
+      if (next > 11) next = 1;
+      if (next < 1) next = 11;
+      focusZoneByStep(next);
+    }
+
+    function focusZoneByStep(stepNum) {
+      selectCanvasZone(stepNum);
+      const el = document.getElementById(`zone-${stepNum}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function updateStepIndicatorUI() {
+      const ind = document.getElementById('activeStepIndicator');
+      const meta = ZONES_METADATA[appState.activeStep];
+      if (ind && meta) {
+        ind.textContent = `Step ${appState.activeStep}/11: ${meta.title.replace(/[\[\]:]/g, '')}`;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // 13. LIVE  FORMULA ENGINE (Flesch-Kincaid + 15-Word Rule)
+    // -----------------------------------------------------------------------
+    function countWords(str) {
+      const clean = String(str || '').trim();
+      if (!clean) return 0;
+      return clean.split(/\s+/).length;
+    }
+
+    // -----------------------------------------------------------------------
+    // 14. EXPORT MARKDOWN & SAVE / LOAD JSON
+    // -----------------------------------------------------------------------
+    function generateMarkdownSummary() {
+      const stats = computeBoard();
+      const formatZone = (z) => {
+        const items = appState.zones[z] || [];
+        if (items.length === 0) return '_Empty_';
+        return items.map((it, idx) => {
+          if (typeof it === 'string') return `${idx + 1}. ${it || '...'}`;
+          return `- **${it.title}**${it.desc ? `: ${it.desc}` : ''}`;
+        }).join('\n');
+      };
+
+      return `# ${appState.projectTitle}
+**AU BTECH — 11-Step AI Business Case Canvas**  
+** Score:** Grade ${stats.grade} (${stats.avgWords} words/item avg)
+
+## I. AS-IS (BEFORE)
+### Step 1. Current Manual Process
+${formatZone(1)}
+
+### Step 2. Friction Cards (Pain Points)
+${formatZone(2)}
+
+### Step 3. Role Cards (Who is involved)
+${formatZone(3)}
+
+---
+
+## II. THE TRANSFORMATION (HOW)
+### Step 4. Primary AI Capability Card
+${formatZone(4)}
+
+### Step 5. The AI Intervention
+${formatZone(5)}
+
+### Step 6. Resource Cards (Data & Tools)
+${formatZone(6)}
+
+---
+
+## III. THE VISION (AFTER)
+### Step 7. The Optimized Process
+${formatZone(7)}
+
+### Step 8. Value Cards (Gains in Time/Quality)
+${formatZone(8)}
+
+### Step 9. Output Map (Visualizing the Final Result)
+${formatZone(9)}
+
+---
+
+## IV. ETHICS & GUARDRAILS
+### Step 10. Global Ethics Cards
+${formatZone(10)}
+
+### Step 11. Project-Specific Ethical Guardrails
+${formatZone(11)}
+`;
+    }
+
+    function openExportModal() {
+      document.getElementById('exportMarkdownTextarea').value = generateMarkdownSummary();
+      const stepCheckbox = document.getElementById('exportIncludeStepNumbers');
+      const headerCheckbox = document.getElementById('exportIncludeMetadataHeader');
+      const teamInput = document.getElementById('exportTeamNameInput');
+      if (stepCheckbox) stepCheckbox.checked = appState.exportIncludeSteps !== false;
+      if (headerCheckbox) headerCheckbox.checked = appState.exportIncludeHeader !== false;
+      if (teamInput) teamInput.value = appState.teamName || 'AU BTECH Sprint Group';
+      refreshExportPreview();
+      document.getElementById('exportModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeExportModal() {
+      document.getElementById('exportModal').classList.add('hidden');
+    }
+
+    function updateTeamName(val) {
+      appState.teamName = val;
+      saveState();
+      refreshExportPreview();
+    }
+
+    function getExportOptionsFromUI() {
+      const stepCheckbox = document.getElementById('exportIncludeStepNumbers');
+      const headerCheckbox = document.getElementById('exportIncludeMetadataHeader');
+      if (stepCheckbox) appState.exportIncludeSteps = stepCheckbox.checked;
+      if (headerCheckbox) appState.exportIncludeHeader = headerCheckbox.checked;
+      return {
+        includeStepNumbers: appState.exportIncludeSteps !== false,
+        includeHeader: appState.exportIncludeHeader !== false,
+        teamName: appState.teamName || 'AU BTECH Sprint Group'
+      };
+    }
+
+    function refreshExportPreview() {
+      const opts = getExportOptionsFromUI();
+      const svgString = generateBoardSVG(opts);
+      const container = document.getElementById('svgPreviewContainer');
+      if (container) {
+        container.innerHTML = svgString;
+        const svgEl = container.querySelector('svg');
+        if (svgEl) {
+          svgEl.style.width = '100%';
+          svgEl.style.height = 'auto';
+          svgEl.style.borderRadius = '8px';
+        }
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // 14B. PURE VECTOR SVG GENERATOR & 2X RETINA PNG EXPORTER
+    // -----------------------------------------------------------------------
+    function wrapSvgText(text, maxCharsPerLine) {
+      const words = String(text || '').trim().split(/\s+/).filter(Boolean);
+      if (words.length === 0) return [];
+      const lines = [];
+      let currentLine = words[0];
+      for (let i = 1; i < words.length; i++) {
+        const word = words[i];
+        if ((currentLine + ' ' + word).length <= maxCharsPerLine) {
+          currentLine += ' ' + word;
+        } else {
+          lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      lines.push(currentLine);
+      return lines;
+    }
+
+    function escapeXml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+    }
+
+    function generateBoardSVG(options = {}) {
+      const includeStepNumbers = options.includeStepNumbers !== undefined
+        ? options.includeStepNumbers
+        : (appState.exportIncludeSteps !== false);
+      const includeHeader = options.includeHeader !== undefined
+        ? options.includeHeader
+        : (appState.exportIncludeHeader !== false);
+      const teamName = options.teamName || appState.teamName || 'AU BTECH Sprint Group';
+
+      const W = 1500;
+      const PAD = 20;
+      const GAP = 4;
+      const innerW = W - PAD * 2;
+      const colW = Math.floor((innerW - GAP * 2) / 3);
+      const colX = [
+        PAD,
+        PAD + colW + GAP,
+        PAD + (colW + GAP) * 2
+      ];
+
+      const stats = computeBoard();
+      const dateStr = new Date().toISOString().slice(0, 10);
+
+      // Measure required height for a card-based zone
+      function measureCardZoneHeight(zoneNum, cellWidth) {
+        const items = appState.zones[zoneNum] || [];
+        const baseHeaderH = 66;
+        if (items.length === 0) return 190;
+
+        if (zoneNum === 4) {
+          // Single prominent AI Capability card
+          const card = items[0];
+          const titleLines = wrapSvgText(card.title || '', 40);
+          const descLines = wrapSvgText(card.desc || '', 54);
+          const cardH = Math.max(108, 46 + titleLines.length * 18 + descLines.length * 15);
+          return Math.max(195, baseHeaderH + cardH + 22);
+        }
+
+        // 2-column grid of cards inside the zone
+        const rows = Math.ceil(items.length / 2);
+        let totalRowsH = 0;
+        for (let r = 0; r < rows; r++) {
+          const c1 = items[r * 2];
+          const c2 = items[r * 2 + 1];
+          const h1 = c1 ? (28 + wrapSvgText(c1.title, 24).length * 15 + wrapSvgText(c1.desc || '', 28).length * 13) : 64;
+          const h2 = c2 ? (28 + wrapSvgText(c2.title, 24).length * 15 + wrapSvgText(c2.desc || '', 28).length * 13) : 64;
+          totalRowsH += Math.max(68, h1, h2) + 8;
+        }
+        return Math.max(190, baseHeaderH + totalRowsH + 16);
+      }
+
+      // Measure required height for a numbered step list zone
+      function measureStepZoneHeight(zoneNum, maxChars) {
+        const items = (appState.zones[zoneNum] || []).filter(s => String(s || '').trim().length > 0);
+        const baseHeaderH = 68;
+        if (items.length === 0) return 190;
+        let listH = 0;
+        items.forEach(stepText => {
+          const lines = wrapSvgText(stepText, maxChars);
+          listH += Math.max(30, lines.length * 16 + 14) + 6;
+        });
+        return Math.max(195, baseHeaderH + listH + 18);
+      }
+
+      // Compute dynamic heights for each row so no text ever clips
+      const row1H = Math.max(
+        measureCardZoneHeight(3, colW),
+        measureCardZoneHeight(6, colW),
+        measureCardZoneHeight(8, colW)
+      );
+      const row2H = Math.max(
+        measureCardZoneHeight(2, colW),
+        measureCardZoneHeight(4, colW),
+        measureCardZoneHeight(9, colW)
+      );
+      const row3H = Math.max(
+        measureStepZoneHeight(1, 52),
+        measureStepZoneHeight(5, 52),
+        measureStepZoneHeight(7, 52)
+      );
+
+      const halfW = Math.floor((innerW - GAP) / 2);
+      const ethicsRowH = Math.max(
+        measureCardZoneHeight(10, halfW),
+        measureStepZoneHeight(11, 80)
+      );
+
+      let cursorY = PAD;
+      const svgParts = [];
+
+      // 1. Optional Metadata Top Banner
+      if (includeHeader) {
+        const metaH = 58;
+        svgParts.push(`
+          <rect x="${PAD}" y="${cursorY}" width="${innerW}" height="${metaH}" rx="8" fill="#0f172a" />
+          <rect x="${PAD + 14}" y="${cursorY + 13}" width="86" height="32" rx="5" fill="#235272" stroke="#38bdf8" stroke-width="1" />
+          <text x="${PAD + 57}" y="${cursorY + 34}" fill="#e0f2fe" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" text-anchor="middle">AU BTECH</text>
+          <text x="${PAD + 114}" y="${cursorY + 28}" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800">${escapeXml(appState.projectTitle || 'AI Business Case Assessment Canvas')}</text>
+          <text x="${PAD + 114}" y="${cursorY + 46}" fill="#94a3b8" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500">Team: ${escapeXml(teamName)}  •  Date: ${dateStr}  •  33A AI Design Sprint &amp; AI Cards Framework</text>
+          <rect x="${W - PAD - 295}" y="${cursorY + 13}" width="280" height="32" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1" />
+          <text x="${W - PAD - 155}" y="${cursorY + 33}" fill="#6ee7b7" font-family="JetBrains Mono, monospace, Arial" font-size="12" font-weight="700" text-anchor="middle">: Grade ${stats.grade} (${stats.avgWords}w avg)</text>
+        `);
+        cursorY += metaH + 10;
+      }
+
+      // 2. Top 3 Column Headers (#235272)
+      const colHeaderH = 62;
+      const colHeaders = [
+        { title: 'AS-IS', sub: '(BEFORE)' },
+        { title: 'THE TRANSFORMATION', sub: '(HOW)' },
+        { title: 'THE VISION', sub: '(AFTER)' }
+      ];
+      colHeaders.forEach((ch, idx) => {
+        const cx = colX[idx];
+        svgParts.push(`
+          <rect x="${cx}" y="${cursorY}" width="${colW}" height="${colHeaderH}" fill="#235272" />
+          <text x="${cx + colW / 2}" y="${cursorY + 27}" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" text-anchor="middle">${ch.title}</text>
+          <text x="${cx + colW / 2}" y="${cursorY + 47}" fill="#e2e8f0" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle">${ch.sub}</text>
+        `);
+      });
+      cursorY += colHeaderH + GAP;
+
+      // Helper to draw a yellow 1-11 badge in top-right of a zone
+      function renderSvgYellowBadge(stepNum, zx, zy, zw) {
+        if (!includeStepNumbers) return '';
+        const bx = zx + zw - 40;
+        const by = zy + 12;
+        return `
+          <rect x="${bx}" y="${by}" width="28" height="28" rx="5" fill="#ffff00" stroke="#ca8a04" stroke-width="1" />
+          <text x="${bx + 14}" y="${by + 19}" fill="#0f172a" font-family="JetBrains Mono, Arial, sans-serif" font-size="13" font-weight="800" text-anchor="middle">${stepNum}</text>
+        `;
+      }
+
+      // Helper to render any card-based zone inside the SVG
+      function renderSvgCardZone(zoneNum, zx, zy, zw, zh, bgFill) {
+        const meta = ZONES_METADATA[zoneNum];
+        const items = appState.zones[zoneNum] || [];
+        let out = `<rect x="${zx}" y="${zy}" width="${zw}" height="${zh}" fill="${bgFill}" />`;
+
+        // Zone Title & Subtitle
+        out += `
+          <text x="${zx + 14}" y="${zy + 25}" fill="#0f172a" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">${escapeXml(meta.title)}</text>
+        `;
+        const subLines = wrapSvgText(meta.subtitle, Math.floor((zw - 65) / 6.2));
+        subLines.forEach((line, idx) => {
+          out += `<text x="${zx + 14}" y="${zy + 43 + idx * 14}" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500">${escapeXml(line)}</text>`;
+        });
+
+        out += renderSvgYellowBadge(zoneNum, zx, zy, zw);
+
+        const contentStartY = zy + 48 + subLines.length * 14;
+
+        if (items.length === 0) {
+          const emptyH = zh - (contentStartY - zy) - 16;
+          out += `
+            <rect x="${zx + 14}" y="${contentStartY}" width="${zw - 28}" height="${Math.max(54, emptyH)}" rx="7" fill="#ffffff" fill-opacity="0.45" stroke="#94a3b8" stroke-dasharray="5,5" stroke-width="1.5" />
+            <text x="${zx + zw / 2}" y="${contentStartY + Math.max(54, emptyH) / 2 + 4}" fill="#64748b" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" text-anchor="middle">No cards placed in Step ${zoneNum}</text>
+          `;
+          return out;
+        }
+
+        // Special single full-width colored card for Zone 4 ([AI Capability Card])
+        if (zoneNum === 4) {
+          const card = items[0];
+          const cardColor = card.color || '#643a82';
+          const titleLines = wrapSvgText(card.title || '', 42);
+          const descLines = wrapSvgText(card.desc || '', 56);
+          const cardH = Math.max(104, 44 + titleLines.length * 17 + descLines.length * 15);
+          const cx = zx + 14;
+          const cy = contentStartY + 2;
+          const cw = zw - 28;
+
+          out += `
+            <rect x="${cx}" y="${cy}" width="${cw}" height="${cardH}" rx="8" fill="${cardColor}" />
+            <rect x="${cx + 12}" y="${cy + 10}" width="195" height="18" rx="4" fill="#000000" fill-opacity="0.28" />
+            <text x="${cx + 18}" y="${cy + 23}" fill="#ffffff" font-family="JetBrains Mono, monospace, Arial" font-size="10" font-weight="700">AI CAPABILITY #${escapeXml(card.number || 1)} • ${escapeXml(card.complexity || '')}</text>
+          `;
+          titleLines.forEach((tl, idx) => {
+            out += `<text x="${cx + 12}" y="${cy + 46 + idx * 17}" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="800">${escapeXml(tl)}</text>`;
+          });
+          const descStartY = cy + 48 + titleLines.length * 17;
+          descLines.forEach((dl, idx) => {
+            out += `<text x="${cx + 12}" y="${descStartY + idx * 14}" fill="#f1f5f9" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500">${escapeXml(dl)}</text>`;
+          });
+          return out;
+        }
+
+        // Standard 2-column cards inside zone (Roles, Frictions, Resources, Value, Output, Ethics)
+        const cardGap = 8;
+        const cardW = Math.floor((zw - 28 - cardGap) / 2);
+        const rows = Math.ceil(items.length / 2);
+        let rowY = contentStartY + 2;
+
+        const accentColor =
+          zoneNum === 2 ? '#f43f5e' :
+          zoneNum === 3 ? '#0284c7' :
+          zoneNum === 6 ? '#f59e0b' :
+          zoneNum === 10 ? '#0f172a' :
+                           '#059669';
+
+        for (let r = 0; r < rows; r++) {
+          const rowCards = [items[r * 2], items[r * 2 + 1]].filter(Boolean);
+          let maxRowCardH = 68;
+          const prepared = rowCards.map(c => {
+            const tLines = wrapSvgText(c.title || '', Math.floor((cardW - 24) / 6.3));
+            const dLines = wrapSvgText(c.desc || '', Math.floor((cardW - 24) / 5.7));
+            const h = Math.max(66, 24 + tLines.length * 14 + dLines.length * 13);
+            if (h > maxRowCardH) maxRowCardH = h;
+            return { card: c, tLines, dLines };
+          });
+
+          prepared.forEach((item, cIdx) => {
+            const cx = zx + 14 + cIdx * (cardW + cardGap);
+            const cy = rowY;
+            out += `
+              <rect x="${cx}" y="${cy}" width="${cardW}" height="${maxRowCardH}" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+              <rect x="${cx}" y="${cy}" width="5" height="${maxRowCardH}" rx="2" fill="${accentColor}" />
+            `;
+            item.tLines.forEach((tl, tIdx) => {
+              out += `<text x="${cx + 12}" y="${cy + 19 + tIdx * 14}" fill="#0f172a" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="800">${escapeXml(tl)}</text>`;
+            });
+            const dStartY = cy + 21 + item.tLines.length * 14;
+            item.dLines.forEach((dl, dIdx) => {
+              out += `<text x="${cx + 12}" y="${dStartY + dIdx * 13}" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="500">${escapeXml(dl)}</text>`;
+            });
+          });
+
+          rowY += maxRowCardH + cardGap;
+        }
+
+        return out;
+      }
+
+      // Helper to render any numbered process step zone inside the SVG (Zones 1, 5, 7, 11)
+      function renderSvgStepZone(zoneNum, zx, zy, zw, zh, bgFill, maxChars) {
+        const meta = ZONES_METADATA[zoneNum];
+        const rawItems = appState.zones[zoneNum] || [];
+        const items = rawItems.filter(s => String(s || '').trim().length > 0);
+        let out = `<rect x="${zx}" y="${zy}" width="${zw}" height="${zh}" fill="${bgFill}" />`;
+
+        out += `
+          <text x="${zx + 14}" y="${zy + 25}" fill="#0f172a" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">${escapeXml(meta.title)}</text>
+        `;
+        const subLines = wrapSvgText(meta.subtitle, Math.floor((zw - 65) / 6.2));
+        subLines.forEach((line, idx) => {
+          out += `<text x="${zx + 14}" y="${zy + 43 + idx * 14}" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500">${escapeXml(line)}</text>`;
+        });
+
+        out += renderSvgYellowBadge(zoneNum, zx, zy, zw);
+
+        let stepY = zy + 50 + subLines.length * 14;
+        if (items.length === 0) {
+          out += `<text x="${zx + 16}" y="${stepY + 24}" fill="#64748b" font-family="Inter, Arial, sans-serif" font-size="12" font-style="italic">1. [No steps entered yet]</text>`;
+          return out;
+        }
+
+        items.forEach((stepText, idx) => {
+          const lines = wrapSvgText(stepText, maxChars);
+          const boxH = Math.max(30, lines.length * 16 + 12);
+          const bx = zx + 14;
+          const bw = zw - 28;
+          out += `
+            <rect x="${bx}" y="${stepY}" width="${bw}" height="${boxH}" rx="5" fill="#ffffff" fill-opacity="0.92" stroke="#cbd5e1" stroke-width="1" />
+            <text x="${bx + 10}" y="${stepY + 19}" fill="#1e293b" font-family="JetBrains Mono, monospace, Arial" font-size="11.5" font-weight="800">${idx + 1}.</text>
+          `;
+          lines.forEach((ln, lIdx) => {
+            out += `<text x="${bx + 30}" y="${stepY + 19 + lIdx * 16}" fill="#0f172a" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="600">${escapeXml(ln)}</text>`;
+          });
+          stepY += boxH + 6;
+        });
+
+        return out;
+      }
+
+      // 3. ROW 1: Zone 3 ([Role Cards]), Zone 6 ([Resource Cards]), Zone 8 ([Value Cards])
+      svgParts.push(renderSvgCardZone(3, colX[0], cursorY, colW, row1H, '#d2d7dd'));
+      svgParts.push(renderSvgCardZone(6, colX[1], cursorY, colW, row1H, '#d2d7dd'));
+      svgParts.push(renderSvgCardZone(8, colX[2], cursorY, colW, row1H, '#d2d7dd'));
+      cursorY += row1H + GAP;
+
+      // 4. ROW 2: Zone 2 ([Friction Cards]), Zone 4 ([AI Capability Card]), Zone 9 ([Output map])
+      svgParts.push(renderSvgCardZone(2, colX[0], cursorY, colW, row2H, '#e7eaee'));
+      svgParts.push(renderSvgCardZone(4, colX[1], cursorY, colW, row2H, '#e7eaee'));
+      svgParts.push(renderSvgCardZone(9, colX[2], cursorY, colW, row2H, '#e7eaee'));
+      cursorY += row2H + GAP;
+
+      // 5. ROW 3: Zone 1 (Current Manual Process), Zone 5 (The AI intervention), Zone 7 (The Optimized Process)
+      svgParts.push(renderSvgStepZone(1, colX[0], cursorY, colW, row3H, '#d5dade', 52));
+      svgParts.push(renderSvgStepZone(5, colX[1], cursorY, colW, row3H, '#d5dade', 52));
+      svgParts.push(renderSvgStepZone(7, colX[2], cursorY, colW, row3H, '#d5dade', 52));
+      cursorY += row3H + GAP;
+
+      // 6. BOTTOM ETHICS BAR HEADERS (#3788c7) + ZONES 10 & 11 (#d0e0f0)
+      const ethHeaderH = 40;
+      const ethLeftX = PAD;
+      const ethRightX = PAD + halfW + GAP;
+
+      svgParts.push(`
+        <rect x="${ethLeftX}" y="${cursorY}" width="${halfW}" height="${ethHeaderH}" fill="#3788c7" />
+        <text x="${ethLeftX + halfW / 2}" y="${cursorY + 25}" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" text-anchor="middle">Ethics Cards</text>
+
+        <rect x="${ethRightX}" y="${cursorY}" width="${halfW}" height="${ethHeaderH}" fill="#3788c7" />
+        <text x="${ethRightX + halfW / 2}" y="${cursorY + 25}" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" text-anchor="middle">Ethical Guardrails</text>
+      `);
+      cursorY += ethHeaderH + GAP;
+
+      svgParts.push(renderSvgCardZone(10, ethLeftX, cursorY, halfW, ethicsRowH, '#d0e0f0'));
+      svgParts.push(renderSvgStepZone(11, ethRightX, cursorY, halfW, ethicsRowH, '#d0e0f0', 80));
+      cursorY += ethicsRowH + PAD;
+
+      const totalH = cursorY;
+
+      return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${totalH}" width="${W}" height="${totalH}">
+  <rect x="0" y="0" width="${W}" height="${totalH}" fill="#f8fafc" />
+  ${svgParts.join('\n')}
+</svg>`;
+    }
+
+    function getCleanFileSlug() {
+      return (appState.projectTitle || 'au-btech-ai-canvas')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || 'au-btech-ai-canvas';
+    }
+
+    function exportBoardSVG() {
+      const opts = getExportOptionsFromUI();
+      const svgString = generateBoardSVG(opts);
+      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${getCleanFileSlug()}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Downloaded scalable vector .SVG board!');
+    }
+
+    function exportBoardPNG() {
+      const opts = getExportOptionsFromUI();
+      const svgString = generateBoardSVG(opts);
+
+      // Parse width and height from generated SVG
+      const widthMatch = svgString.match(/width="(\d+)"/);
+      const heightMatch = svgString.match(/height="(\d+)"/);
+      const svgW = widthMatch ? parseInt(widthMatch[1], 10) : 1500;
+      const svgH = heightMatch ? parseInt(heightMatch[1], 10) : 1000;
+      const scale = 2; // 2x Retina Resolution (3000px wide)
+
+      const canvas = document.createElement('canvas');
+      canvas.width = svgW * scale;
+      canvas.height = svgH * scale;
+      const ctx = canvas.getContext('2d');
+
+      const img = new Image();
+      const svgDataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+
+      img.onload = () => {
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((pngBlob) => {
+          if (!pngBlob) {
+            showToast('Failed to encode PNG image.', 'amber');
+            return;
+          }
+          const url = URL.createObjectURL(pngBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${getCleanFileSlug()}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('Downloaded high-resolution 2x .PNG board!');
+        }, 'image/png');
+      };
+
+      img.onerror = () => {
+        showToast('Could not render PNG preview.', 'amber');
+      };
+
+      img.src = svgDataUrl;
+    }
+
+    function copyMarkdownToClipboard() {
+      const area = document.getElementById('exportMarkdownTextarea');
+      area.select();
+      document.execCommand('copy');
+      showToast('Copied 11-Step Markdown Report to clipboard!');
+    }
+
+    function downloadJsonFile() {
+      const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const slug = (appState.projectTitle || 'ai-canvas').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      a.href = url;
+      a.download = `${slug}.aicanvas.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Saved .aicanvas.json to your computer!');
+    }
+
+    function uploadJsonFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && parsed.zones) {
+            appState = { ...appState, ...parsed };
+            document.getElementById('projectTitleInput').value = appState.projectTitle;
+            saveState();
+            renderAll();
+            closeExportModal();
+            showToast('Loaded board from computer!');
+          }
+        } catch (err) {
+          showToast('Invalid JSON file.', 'amber');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // -----------------------------------------------------------------------
+    // 15. UTILITIES
+    // -----------------------------------------------------------------------
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function showToast(msg, tone = 'sky') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const el = document.createElement('div');
+      el.className = `px-3.5 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold shadow-lg border-l-4 ${tone === 'amber' ? 'border-amber-400' : 'border-sky-400'}`;
+      el.textContent = msg;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 2600);
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
