@@ -1,0 +1,97 @@
+{
+  "projectTitle": "Fresh Dairy Demand Forecast",
+  "zones": {
+    "1": [
+      "Planners estimate weekly milk pickup volumes and supermarket deliveries in Excel.",
+      "Supermarket orders fluctuate unexpectedly due to weather and local promotions.",
+      "Excess milk leads to surplus processing or food waste."
+    ],
+    "2": [
+      {
+        "id": "fric-a1",
+        "title": "Unpredictable Daily Demand",
+        "desc": "Surplus milk processing or empty supermarket shelves due to rough forecasts."
+      },
+      {
+        "id": "fric-a2",
+        "title": "Manual Spreadsheet Planning",
+        "desc": "Planners spend days adjusting distribution numbers across multiple regions."
+      }
+    ],
+    "3": [
+      {
+        "id": "role-a1",
+        "title": "Supply Chain Planner",
+        "desc": "Balances milk pickup quantities from farms with supermarket orders."
+      },
+      {
+        "id": "role-a2",
+        "title": "Supermarket Buyer",
+        "desc": "Orders daily quantities of fresh milk, butter, and cheese."
+      }
+    ],
+    "4": [
+      {
+        "id": "ai-12",
+        "number": 12,
+        "title": "AI FORECASTS",
+        "color": "#4dad69",
+        "complexity": "Rather complex",
+        "desc": "Predicts future demand, inventory needs, or market trends."
+      }
+    ],
+    "5": [
+      "AI predicts regional dairy demand based on weather forecasts, holidays, and past sales.",
+      "Supply chain planner reviews suggested delivery volumes and confirms truck schedules."
+    ],
+    "6": [
+      {
+        "id": "res-a1",
+        "title": "Historical Sales & Weather Data",
+        "desc": "Past 3 years of supermarket orders combined with local weather patterns."
+      },
+      {
+        "id": "res-a2",
+        "title": "Farm Pickup Capacities",
+        "desc": "Database of cooperative dairy farmer milk volumes."
+      }
+    ],
+    "7": [
+      "AI generates 7-day regional demand forecasts every Monday morning.",
+      "Planner fine-tunes delivery routes based on local events or promotions.",
+      "Optimized milk shipments are dispatched with less food waste and fresher products on shelves."
+    ],
+    "8": [
+      {
+        "id": "val-a1",
+        "title": "15% Reduction in Dairy Waste",
+        "desc": "Better alignment between farm collection and supermarket demand reduces surplus."
+      }
+    ],
+    "9": [
+      {
+        "id": "out-a1",
+        "title": "[Output Map] Weekly Distribution Plan",
+        "desc": "Interactive map showing recommended delivery volumes per region."
+      }
+    ],
+    "10": [
+      {
+        "id": "eth-5",
+        "title": "GREEN",
+        "icon": "leaf",
+        "desc": "Having a neutral or positive effect on nature and energy use."
+      },
+      {
+        "id": "eth-13",
+        "title": "ACCOUNTABILITY",
+        "icon": "user-cog",
+        "desc": "Clear which person is responsible for every action and AI decision."
+      }
+    ],
+    "11": [
+      "Supply chain planner retains final sign-off authority on all dairy delivery schedules.",
+      "Forecast models are audited quarterly to minimize food waste and optimize transport emissions."
+    ]
+  }
+}
